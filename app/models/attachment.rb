@@ -42,8 +42,10 @@ class Attachment < ActiveRecord::Base
 
   def image?
     content_type = self.content_type.downcase
+    logger.info "================= content type for update: #{content_type}"
     content_type == 'image/gif' or
       content_type == 'image/jpeg' or
+      content_type == 'image/bmp' or
       content_type == 'image/png' or
       content_type == 'image/tiff'
   end
