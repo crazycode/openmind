@@ -182,6 +182,9 @@ module ApplicationHelper
     "<strike>#{text}</strike>"
   end
 
+  def show_comment_edit_links
+    params["action"] != "new"
+  end
   
   private
   
