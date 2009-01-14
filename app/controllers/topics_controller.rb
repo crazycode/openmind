@@ -27,6 +27,8 @@ class TopicsController < ApplicationController
   end
 
   def create
+    TagList.delimiter = " "
+    
     forum_id = params[:forum_id]      
     @topic = Topic.new(params[:topic])
     @topic.forum_id = forum_id
@@ -98,7 +100,7 @@ class TopicsController < ApplicationController
     @topic = Topic.find(params[:id])
     if @topic.update_attributes(params[:topic])
       flash[:notice] = "Topic '#{@topic.title}' was successfully updated."
-      redirect_to forum_path(@topic.forum)
+      redirect_to topic_path(@topic)
     else
       render :action => :edit
     end

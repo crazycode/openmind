@@ -18,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
     :member => { :endorse => :post, :unendorse => :post, :attach => :get }
   map.resources :enterprises, :member => { :next => :get, :previous => :get }
   map.resources :forums, :collection => { :search => :get, 
-    :rss => :get }
+    :rss => :get, :tag => :get }
   map.resources :groups
   map.resources :link_sets, :member => { :update_sort => :post }
   map.resources :lookup_codes
@@ -30,7 +30,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :products
   map.resources :releases, :member => { :commit => :post },
     :collection => { :preview => :get, :list => :get }
-  map.resources :topics, :collection => { :preview => :get, :search => :get }
+  map.resources :topics, :collection => { :preview => :get, :search => :get,
+    :tag => :get }
   map.resources :user_logons
   map.resources :user_requests, :member => { :approve => :post, :reject => :post,
     :acknowledge => :get, :next => :get, :previous => :get }

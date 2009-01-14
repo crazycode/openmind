@@ -1,8 +1,7 @@
 module ForumsHelper
   def can_edit? forum
     sysadmin? or forum.can_edit? current_user unless current_user == :false
-  end
-  
+  end  
     
   def last_forum_post forum
     last_comment = forum.comments.first #this isn't very efficient...replace by sql?
@@ -118,6 +117,16 @@ module ForumsHelper
   def forum_details_box_display_style
     return "display:block;" if session[:forum_details_box_display] == "SHOW"
     return "display:none;"
+  end
+
+  def get_tags forum
+    if forum.nil?
+      # Restrict tags for forums that the user has access to
+      Topic.tag_counts(:limit => 100, :conditions => ["topics.id in (?)",
+        Forum.find(:all).find_all{|f| f.can_see? current_user}.collect(&:topics).flatten.collect(&:id)])
+    else
+      forum.topics.tag_counts(:limit => 100)
+    end
   end
   
   private

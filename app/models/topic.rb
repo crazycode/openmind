@@ -16,6 +16,8 @@
 #
 
 class Topic < ActiveRecord::Base
+  acts_as_taggable
+  
   belongs_to :forum
   belongs_to :user
   has_many :comments, :class_name => "TopicComment", :dependent => :delete_all,

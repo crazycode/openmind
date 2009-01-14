@@ -10,13 +10,20 @@
         <% end %>
       </ul>
     </div>
-  </div> 
-  
+  </div>
+
   <% forum_link_set = @forum.link_set unless @forum.nil? %>
   <% link_set = nvl(forum_link_set, LinkSet.get_default_link_set) %>
-  
+
   <%=render(:partial => "link_sets/link_sidebar", :locals => {:link_set => link_set})%>
-     
+
+  <div class="sideBarTitle">Tag Cloud</div>
+  <div class="sideBarItem">
+    <% tag_cloud get_tags(@forum), %w(css1 css2 css3 css4) do |tag, css_class| %>
+      <%= link_to tag.name, { :action => :tag, :id => tag.name }, :class => css_class %>
+    <% end %>
+  </div>
+
   <div class="sideBarTitle">Most Active Users</div>
   <div class="sideBarItem">
     <div class="unorderListNavContainer">
@@ -29,7 +36,7 @@
       </ul>
     </div>
   </div>
-  
+
   <% unless @forum.nil? %>
     <% tiptxt= "Subscribe to be notified of postings in this forum" %>
     <a href="<%= url_for(:action => 'rss', :id => @forum, :only_path => false) %>" onmouseover="Tip('<%= tiptxt %>')"><%= theme_image_tag("icons/14x14/feed-icon-14x14.png", :border=>0) %></a>

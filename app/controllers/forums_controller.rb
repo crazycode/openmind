@@ -132,6 +132,13 @@ class ForumsController < ApplicationController
     return "You must be logged on to access this forum" if user == :false
     return "You have insuffient permissions to access this forum" unless user == :false    
   end
+
+  def tag
+    #    render :action => 'list'
+    session[:topic_view_type] = "tags"
+    session[:topic_tag_filter] = params[:id]
+    redirect_to :action => :list
+  end
   
   private
   
