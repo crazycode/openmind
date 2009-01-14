@@ -40,18 +40,22 @@ class Attachment < ActiveRecord::Base
       :per_page => per_page
   end
 
+  @@content_types = [
+    'image/gif',
+    'image/jpeg',
+    'image/pjpeg',
+    'image/bmp',
+    'image/png',
+    'image/tiff'
+  ]
+
   def image?
     content_type = self.content_type.downcase
-    is_image = content_type == 'image/gif' or
-      content_type == 'image/jpeg' or
-      content_type == 'image/pjpeg' or
-      content_type == 'image/bmp' or
-      content_type == 'image/png' or
-      content_type == 'image/tiff'
-    unless is_image
-      logger.info "================= content type for update: #{content_type}"
+    for ctype in @@content_types
+      return true if ctype == content_type
     end
-    is_image
+    logger.error "================= content type for update: #{content_type}"
+    false
   end
 
   private

@@ -55,6 +55,10 @@ class AttachmentsController < ApplicationController
       redirect_on_error params, "Please specify a file to upload"
       return
     end
+    if params[:attachment][:description].blank?
+      redirect_on_error params, "Please specify a file description"
+      return
+    end
     if not_from_comment? params
       @attachment = Attachment.new(params[:attachment])
     else
