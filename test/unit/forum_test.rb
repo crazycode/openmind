@@ -69,7 +69,7 @@ class ForumTest < Test::Unit::TestCase
       # prodmgr
       assert users(:prodmgr).prodmgr?
       assert forums(:forum_restricted_to_user_group).can_see?(users(:prodmgr))
-      assert !forums(:forum_restricted_to_user_group).can_edit?(users(:prodmgr))
+      assert forums(:forum_restricted_to_user_group).can_edit?(users(:prodmgr))
       # group member
       assert forums(:forum_restricted_to_user_group).can_see?(users(:bob))
       assert !forums(:forum_restricted_to_user_group).can_edit?(users(:bob))
@@ -82,7 +82,7 @@ class ForumTest < Test::Unit::TestCase
       # prodmgr
       assert users(:prodmgr).prodmgr?
       assert forums(:forum_restricted_to_enterprise_type).can_see?(users(:prodmgr))
-      assert !forums(:forum_restricted_to_enterprise_type).can_edit?(users(:prodmgr))
+      assert forums(:forum_restricted_to_enterprise_type).can_edit?(users(:prodmgr))
       # group member
       assert forums(:forum_restricted_to_enterprise_type).can_see?(users(:judy))
       assert !forums(:forum_restricted_to_enterprise_type).can_edit?(users(:judy))

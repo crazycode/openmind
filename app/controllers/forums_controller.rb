@@ -59,14 +59,14 @@ class ForumsController < ApplicationController
   end
 
   def update
-    unless @forum.can_edit? current_user
-      flash[:error] = "You do not have access to edit that forum"
-      redirect_to forums_path
-    end
     params[:forum][:mediator_ids] ||= []
     params[:forum][:group_ids] ||= []
     params[:forum][:enterprise_type_ids] ||= []
     @forum = Forum.find(params[:id])
+    unless @forum.can_edit? current_user
+      flash[:error] = "You do not have access to edit that forum"
+      redirect_to forums_path
+    end
     if @forum.update_attributes(params[:forum])
       flash[:notice] = "Forum '#{@forum.name}' was successfully updated."
       redirect_to forum_path(@forum)

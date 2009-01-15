@@ -124,7 +124,7 @@ class TopicsControllerTest < Test::Unit::TestCase
   def test_update
     put :update, {:id => topics(:bug_topic1)}
     assert_response :redirect
-    assert_redirected_to forum_path(topics(:bug_topic1).forum)
+    assert_redirected_to topic_path(topics(:bug_topic1))
   end
 
   def test_destroy

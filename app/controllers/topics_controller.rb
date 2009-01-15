@@ -90,7 +90,7 @@ class TopicsController < ApplicationController
   def edit
     @topic = Topic.find(params[:id])
     
-    unless @topic.forum.can_see? current_user or prodmgr?
+    unless @topic.forum.can_edit? current_user or prodmgr?
       flash[:error] = ForumsController.forum_access_denied(current_user)
       redirect_to forums_path
     end
@@ -98,6 +98,11 @@ class TopicsController < ApplicationController
 
   def update
     @topic = Topic.find(params[:id])
+
+    unless @topic.forum.can_edit? current_user or prodmgr?
+      flash[:error] = ForumsController.forum_access_denied(current_user)
+      redirect_to forums_path
+    end
     if @topic.update_attributes(params[:topic])
       flash[:notice] = "Topic '#{@topic.title}' was successfully updated."
       redirect_to topic_path(@topic)
