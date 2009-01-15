@@ -134,10 +134,16 @@ class ForumsController < ApplicationController
   end
 
   def tag
-    #    render :action => 'list'
-    session[:topic_view_type] = "tags"
-    session[:topic_tag_filter] = params[:id]
-    redirect_to :action => :list
+    @hits = {}
+    @tags = params[:id]
+    @forum = Forum.find(params[:forum]) unless params[:forum].nil?
+    Topic.find_tagged_with(@tags).each do |topic|
+      if (topic.forum.can_see?(current_user) or prodmgr?) and
+          (@forum.nil? or @forum.id == topic.forum.id)
+        @hits[topic.id] = TopicHit.new(topic, true)
+      end
+    end
+    render :action => :search
   end
   
   private
