@@ -1,7 +1,8 @@
 class AttachmentsController < ApplicationController
   include ActionView::Helpers::NumberHelper
   before_filter :login_required, :except => [ :download ]
-  access_control [:index, :edit, :update, :destroy] => 'prodmgr | sysadmin'
+  access_control [:index, :edit, :update] => 'prodmgr | sysadmin | mediator',
+    [:destroy] => 'prodmgr | sysadmin'
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create ],
