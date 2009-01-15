@@ -46,6 +46,7 @@ class Attachment < ActiveRecord::Base
     'image/pjpeg',
     'image/bmp',
     'image/png',
+    'image/x-png',
     'image/tiff'
   ]
 
