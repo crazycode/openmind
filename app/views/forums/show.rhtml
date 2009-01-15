@@ -15,7 +15,7 @@
       html_options = {:class=> "button",
       :onmouseover => "Tip('Create a new topic')"}%>
   <% end %>
-  <% if sysadmin? %>
+  <% if @forum.can_edit? current_user %>
     <%= link_to 'Edit', edit_forum_url(@forum), html_options = {:class=> "button",
       :onmouseover => "Tip('Edit this forum')"} %>
   <% end %>
