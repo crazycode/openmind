@@ -1,6 +1,7 @@
 class ForumsController < ApplicationController
   before_filter :login_required, :except => [:index, :show, :rss]
-  access_control [:new, :edit, :create, :update, :destroy ] => 'sysadmin'
+  access_control [:new, :destroy ] => 'sysadmin',
+    [:edit, :create, :update ] => 'sysadmin|mediator'
   helper :topics
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
@@ -51,9 +52,17 @@ class ForumsController < ApplicationController
   def edit
     @forum = Forum.find(params[:id])
     @mediators = Role.find_users_by_role('mediator')
+    unless @forum.can_edit? current_user
+      flash[:error] = "You do not have access to edit that forum"
+      redirect_to forums_path
+    end
   end
 
   def update
+    unless @forum.can_edit? current_user
+      flash[:error] = "You do not have access to edit that forum"
+      redirect_to forums_path
+    end
     params[:forum][:mediator_ids] ||= []
     params[:forum][:group_ids] ||= []
     params[:forum][:enterprise_type_ids] ||= []

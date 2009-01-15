@@ -46,7 +46,7 @@ class Forum < ActiveRecord::Base
   end
   
   def can_edit? user
-    mediators.include? user
+    mediators.include? user or user.prodmgr? or user.sysadmin?
   end 
   
   # Return a list of topics for this forum that have comments which have not yet
@@ -70,7 +70,7 @@ class Forum < ActiveRecord::Base
   end
   
   def can_see? user
-    return true if user != :false and user.prodmgr?
+    return true if user != :false and (user.prodmgr? or user.sysadmin?)
     can_edit? user or 
       (((groups.empty? and enterprise_types.empty?) or 
           !groups.select{|group| group.users.include? user}.empty? or
