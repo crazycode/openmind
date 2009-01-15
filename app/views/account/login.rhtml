@@ -18,7 +18,7 @@
     <p><%= submit_tag 'Sign in', html_options = {:class=> "button", :disable_with => "Please wait..."} %></p>
   <% end %>
   <p>
-    <%= link_to 'Register', new_user_request_path %>
+    <%= link_to 'Request Account', new_user_request_path %>
     &nbsp;|&nbsp;
     <%= link_to 'Forgot your password?', { :controller => :users,
       :action => 'lost_password' } %>
