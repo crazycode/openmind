@@ -25,7 +25,8 @@ class TopicComment < Comment
   
   def can_edit? current_user, role_override=false
     return true if role_override
-    topic.last_comment?(self) and user.id == current_user.id
+    (topic.last_comment?(self) and user.id == current_user.id) or
+      topic.forum.mediators.include? current_user
   end
 
   def endorsed?
