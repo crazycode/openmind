@@ -44,6 +44,10 @@ class Forum < ActiveRecord::Base
     return Forum.find(:all, :conditions => ["forum_group_id is null"], :order => 'name ASC') if forum_group.nil?
     Forum.find_all_by_forum_group_id(forum_group.id, :order => 'name ASC')
   end
+
+  def self.list_visible user
+    Forum.find(:all, :order => 'name ASC').find_all{|f| f.can_see? user}
+  end
   
   def can_edit? user
     mediators.include? user or (user != :false and (user.prodmgr? or user.sysadmin?))
