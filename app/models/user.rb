@@ -75,8 +75,8 @@ class User < ActiveRecord::Base
   has_many :user_logons, :order => "created_at DESC", :dependent => :destroy   
   has_many :ideas,:dependent => :destroy, :order => "id ASC"   
   has_many :allocations, :dependent => :destroy, :order => "created_at ASC"   
-  has_many :active_allocations, :conditions => ["expiration_date > ?", Date.current.to_s(:db)], 
-    :order => "created_at ASC"   
+  #  has_many :active_allocations, :conditions => ["expiration_date > ?", Date.current.to_s(:db)],
+  #    :order => "created_at ASCactive_allocations"
   # all votes by this user based only on user allocations
   has_many :votes, :through => :allocations, :order => "votes.id ASC"
   # all votes by this user regardless of allocation

@@ -169,7 +169,7 @@ class UserRequestsController < ApplicationController
   private
   
   def setup_values
-    @enterprises = Enterprise.active_enterprises 
+    @enterprises = Enterprise.active 
     enterprise = Enterprise.new(:id => 0, :name => "Create new enterprise...") 
     @enterprises.insert(0, enterprise)
   end

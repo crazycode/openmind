@@ -16,7 +16,7 @@ class EnterpriseTest < Test::Unit::TestCase
   should_have_many :votes, :through => :allocations
   should_belong_to :enterprise_type
   
-  should_have_instance_methods :name, :active, :enterprise_type, :active_allocations
+  should_have_instance_methods :name, :active, :enterprise_type
   should_have_db_columns :enterprise_type_id
   should_have_index :name
   
@@ -52,6 +52,6 @@ class EnterpriseTest < Test::Unit::TestCase
   end
   
   should "retrieve active enterprises" do
-    assert_equal 5, Enterprise.active_enterprises.size
+    assert_equal 5, Enterprise.active.size
   end
 end

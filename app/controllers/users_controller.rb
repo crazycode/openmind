@@ -356,7 +356,7 @@ class UsersController < ApplicationController
   end
   
   def setup_session_properties
-    @enterprises = Enterprise.active_enterprises    
+    @enterprises = Enterprise.active   
   end
   
   def yes? str
