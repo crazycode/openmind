@@ -115,7 +115,6 @@ class IdeasController < ApplicationController
   end
 
   def show
-    TagList.delimiter = " "
     begin
       @idea = Idea.find(params[:id])
       session[:selected_tab] = params[:selected_tab] if !params[:selected_tab].nil?
@@ -168,7 +167,6 @@ class IdeasController < ApplicationController
   end
 
   def create
-    TagList.delimiter = " "
     #    params['idea'].each_pair {|key, value| puts "[#{key}] #{value}"}
     @idea = Idea.new(params[:idea])
     @idea.user_id = current_user.id
@@ -191,7 +189,6 @@ class IdeasController < ApplicationController
   end
 
   def edit
-    TagList.delimiter = " "
     @idea = Idea.find(params[:id])
     authorize_edit @idea
   end
@@ -208,7 +205,6 @@ class IdeasController < ApplicationController
   end
 
   def update
-    TagList.delimiter = " "
     params[:idea][:release_id] = nil if !params[:idea].nil? and params[:idea][:release_id] == "0"
     @idea = Idea.find(params[:id])
     original_idea = Idea.find(@idea.id, :readonly => true)

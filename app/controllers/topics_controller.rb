@@ -26,9 +26,7 @@ class TopicsController < ApplicationController
     @comment ||= TopicComment.new(:topic => @topic)
   end
 
-  def create
-    TagList.delimiter = " "
-    
+  def create    
     forum_id = params[:forum_id]      
     @topic = Topic.new(params[:topic])
     @topic.forum_id = forum_id
