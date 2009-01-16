@@ -1,5 +1,5 @@
 class ForumsController < ApplicationController
-  before_filter :login_required, :except => [:index, :show, :rss]
+  before_filter :login_required, :except => [:index, :show, :rss, :search, :tag]
   access_control [:new, :destroy ] => 'sysadmin',
     [:edit, :create, :update ] => 'sysadmin|mediator'
   helper :topics
