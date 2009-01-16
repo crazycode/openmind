@@ -31,7 +31,9 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
-  acts_as_ordered :order => 'email' 
+  acts_as_ordered :order => 'email'
+  ajaxful_rater
+
   
   # Virtual attribute for the unencrypted password
   attr_accessor :password
@@ -84,6 +86,7 @@ class User < ActiveRecord::Base
   has_many :comments,:dependent => :destroy, :order => "id ASC"
   has_many :topic_comments,:dependent => :destroy, :order => "id ASC"
   has_many :user_idea_reads,:dependent => :destroy
+  has_many :rates
   
   before_create :make_activation_code
 

@@ -2,7 +2,7 @@ class TopicsController < ApplicationController
   before_filter :login_required, :except => [:index, :show]
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [:create ],
+  verify :method => :post, :only => [:create, :rate ],
     :redirect_to => { :action => :index }
   verify :method => :put, :only => [ :update ],
     :redirect_to => { :action => :index }
@@ -147,6 +147,17 @@ class TopicsController < ApplicationController
       format.js  { do_rjs_toggle_topic_details_box }
     end
   end
+
+  def rate
+    @topic = Topic.find(params[:id])
+    @topic.rate(params[:stars], current_user, params[:dimension])
+    id = "ajaxful-rating-#{!params[:dimension].blank? ? "#{params[:dimension]}-" : ''}topic-#{@topic.id}"
+    render :update do |page|
+      page.replace_html id, ratings_for(@topic, :wrap => false, :dimension => params[:dimension])
+      page.visual_effect :highlight, id
+    end
+  end
+
   
   private
   

@@ -17,7 +17,9 @@
 
 class Topic < ActiveRecord::Base
   acts_as_taggable
-  
+  ajaxful_rateable :stars => 5, 
+    :allow_update => true,
+    :cache_column => :rating_average
   belongs_to :forum
   belongs_to :user
   has_many :comments, :class_name => "TopicComment", :dependent => :delete_all,
