@@ -21,13 +21,11 @@ class Group < ActiveRecord::Base
     :class_name => 'User', :order => 'email ASC'
   has_and_belongs_to_many :forums
   has_and_belongs_to_many :polls
+
+  named_scope :by_name, :order => "name ASC"
   
   def can_delete?
     true
-  end
-  
-  def self.list_all
-    Group.find(:all, :order => 'name ASC')
   end
   
   def self.list(page, per_page)

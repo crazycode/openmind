@@ -20,7 +20,7 @@
     </p>
     <p>
       <label for="product">Product:</label>
-      <%=form.collection_select :product_id, Product.all_active_products, :id, :name,
+      <%=form.collection_select :product_id, Product.active.by_name, :id, :name,
         options = { :prompt => true} %>    
     </p>
     <p>
