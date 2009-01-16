@@ -27,9 +27,9 @@ class EnterpriseTest < Test::Unit::TestCase
   
   should "retrieve active users" do
     e = enterprises(:active_enterprise)
-    assert e.active_users.collect(&:id).include?(users(:quentin).id)
-    assert !e.active_users.collect(&:id).include?(users(:inactive_user).id)
-    assert !e.active_users.collect(&:id).include?(users(:imported_user).id)
+    assert e.users.active.collect(&:id).include?(users(:quentin).id)
+    assert !e.users.active.collect(&:id).include?(users(:inactive_user).id)
+    assert !e.users.active.collect(&:id).include?(users(:imported_user).id)
   end
   
   should "enforce uniqueness" do

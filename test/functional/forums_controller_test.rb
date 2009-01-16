@@ -57,6 +57,16 @@ class ForumsControllerTest < Test::Unit::TestCase
     assert_not_nil assigns(:forums)
   end
 
+  def test_index_without_login
+    login_as nil
+    get :index
+
+    assert_response :success
+    assert_template 'index'
+
+    assert_not_nil assigns(:forums)
+  end
+
   def test_create
     num_forums = Forum.count
 

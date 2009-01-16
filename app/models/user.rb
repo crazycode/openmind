@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
   attr_accessor :password
   attr_accessor :initial_allocation # to allow user to create an allocation at the
-                                    # same time they create a user
+  # same time they create a user
   attr_protected :activated_at 
 
   validates_presence_of     :email, :row_limit, :last_name, :enterprise
@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password,                   :if => :password_required?
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :email, :case_sensitive => false
-  validates_email_format_of :email
+  validates_email_format_of :email, :allow_nil => true
   validates_numericality_of :row_limit 
   validates_length_of       :first_name, :maximum => 40, :allow_nil => true
   validates_length_of       :last_name, :maximum => 40, :allow_nil => true
@@ -87,15 +87,28 @@ class User < ActiveRecord::Base
   
   before_create :make_activation_code
 
+  
+  named_scope :active,
+    :conditions => [ "active = ?", true],
+    :order => 'email asc'
+
+  # imported users have both activated_at and activation_code as null
+  named_scope :imported_users,
+    :conditions => ["activated_at is null and activation_code is null" ]
+
+  named_scope :sysadmins,
+    :joins => [:roles],
+    :conditions => ['users.active = 1 and roles.title = ?', 'sysadmin'],
+    :order => :email
+
+
+  named_scope :voters,
+    :joins => [:roles],
+    :conditions => "roles.title = 'Voter'",
+    :order => 'users.email'
+
   def self.row_limit_options
     [10, 25, 50, 100]
-  end
-  
-  def self.sysadmins
-    User.find(:all, 
-      :include => [:roles], 
-      :conditions => ['users.active = 1 and roles.title = ?', 'sysadmin'], 
-      :order => :email)
   end
   
   def sysadmin?
@@ -110,22 +123,12 @@ class User < ActiveRecord::Base
     user_logons.find(:all, :conditions => ['created_at > ?', (Time.zone.now - 60*60*24*90).to_s(:db)])
   end
   
-  def active_allocations
-    allocations.find(:all, 
-      :conditions => ['expiration_date >= ?', (Date.current).to_s(:db)],
-      :order => 'expiration_date asc')
-  end
-  
-  # imported users have both activated_at and activation_code as null
-  def self.imported_users
-    User.find(:all, :conditions => ["activated_at is null and activation_code is null" ])
-  end
-  
   def last_logon_date
     last_logon.created_at unless last_logon.nil?
   end
   
-  # Authenticates a user by their email and unencrypted password.  Returns the user or nil.
+  # Authenticates a user by their email and unencrypted password.  Returns the
+  # user or nil.
   def self.authenticate(email, password)
     # hide records with a nil activated_at
     u = User.find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email]
@@ -159,7 +162,8 @@ class User < ActiveRecord::Base
     self.email = p_login
   end
 
-  # These create and unset the fields required for remembering users between browser closes
+  # These create and unset the fields required for remembering users between
+  # browser closes
   def remember_me
     self.remember_token_expires_at = 2.weeks.from_now.utc
     self.remember_token            = encrypt("#{email}--#{remember_token_expires_at}")
@@ -178,7 +182,7 @@ class User < ActiveRecord::Base
   
   def available_user_votes
     count = 0
-    for allocation in active_allocations
+    for allocation in allocations.active
       count += allocation.quantity - allocation.votes.size
     end
     count
@@ -186,7 +190,7 @@ class User < ActiveRecord::Base
   
   def available_enterprise_votes
     count = 0
-    for allocation in enterprise.active_allocations
+    for allocation in enterprise.allocations.active
       count += allocation.quantity - allocation.votes.size
     end
     count
@@ -202,18 +206,6 @@ class User < ActiveRecord::Base
       :conditions => ["(email >= ? and email <= ?) or ? = 'All'",
       start_filter, end_filter, start_filter
     ]
-  end
-  
-  def self.active_users
-    User.find_all_by_active(true, :order => 'email')
-  end
-  
-  def self.active_voters
-    User.find_all_by_active(true, 
-      :joins => "inner join roles_users as ru on users.id = ru.user_id inner join roles as r on ru.role_id = r.id", 
-      :conditions => "r.title = 'Voter'", 
-      :select => 'users.*',
-      :order => 'email')
   end
   
   def full_name
@@ -278,7 +270,7 @@ class User < ActiveRecord::Base
   end
 
   protected
-  # before filter 
+  # before filter
   def encrypt_password
     return if password.blank?
     self.salt = Digest::SHA1.hexdigest("--#{Time.zone.now.to_s}--#{email}--") if new_record?

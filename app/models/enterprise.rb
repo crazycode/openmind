@@ -29,6 +29,8 @@ class Enterprise < ActiveRecord::Base
     :order => "created_at ASC"   
   has_many :votes, :through => :allocations, :order => "votes.id ASC"
   belongs_to :enterprise_type
+
+  named_scope :active, :conditions => {:active => true}
   
   def self.list(page, per_page, start_filter, end_filter)
     paginate :page => page, :order => 'name', 
@@ -42,10 +44,6 @@ class Enterprise < ActiveRecord::Base
     allocations.find(:all, 
       :conditions => ['expiration_date >= ?', (Date.current).to_s(:db)],
       :order => 'expiration_date asc')
-  end
-  
-  def active_users 
-    users.find(:all, :conditions => [ "active = ? and activated_at is not null", true])
   end
 
   def can_delete?

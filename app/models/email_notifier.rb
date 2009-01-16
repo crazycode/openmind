@@ -95,7 +95,7 @@ class EmailNotifier < ActionMailer::Base
     setup_allocation_email allocation
     @subject   += "#{allocation.enterprise.name} just received a new allocation for #{StringUtils.pluralize(allocation.quantity, 'unit')}"
     @recipients = ''
-    @bcc = allocation.enterprise.active_users.collect(&:email)
+    @bcc = allocation.enterprise.users.active.collect(&:email)
     set_expiration_date allocation
   end
   
