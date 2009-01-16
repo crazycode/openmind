@@ -1,4 +1,4 @@
-<%content_for :head do -%>
+bsturim@scribesoft.com<%content_for :head do -%>
   <%= javascript_include_tag "lightbox" %>
   <%= javascript_include_tag 'builder' %>
   <%= stylesheet_link_tag 'lightbox' %>
@@ -16,26 +16,6 @@
     '<span class="highlight">\1</span>') unless comment_item.textiled %>
   <%= highlight(textilize(white_list(comment_item.body)), session[:forums_search].split, '<span class="highlight">\1</span>') if comment_item.textiled %>
 
-  <% if show_comment_edit_links %>
-    <%= link_to '[Endorse]', endorse_comment_path(comment_item),
-      html_options = { :class=> "btTxt editButton",
-      :method => :post,
-      :onmouseover => "Tip('Endorse this comment')"} if comment_item.can_endorse? current_user %>
-
-    <%= link_to '[Un-Endorse]', unendorse_comment_path(comment_item),
-      html_options = { :class=> "btTxt editButton",
-      :method => :post,
-      :onmouseover => "Tip('Remove the endorsement for this comment')"} if comment_item.can_unendorse? current_user %>
-
-    <%= "&nbsp;" if ( comment_item.can_unendorse? current_user or  comment_item.can_endorse? current_user) and can_edit_comment? comment_item %>
-    <%= link_to '[Edit]', edit_comment_path(comment_item),
-      html_options = { :class=> "btTxt editButton",
-      :onmouseover => "Tip('Edit this comment')"} if can_edit_comment? comment_item %>
-    <%= "&nbsp;" if can_edit_comment? comment_item %>
-    <%= link_to '[Add Image]', attach_comment_path(comment_item),
-      html_options = { :class=> "btTxt editButton",
-      :onmouseover => "Tip('Add an image to this comment')"} if can_edit_comment? comment_item %>
-  <% end %>
   <% unless comment_item.comment_attachments.empty? %>
     <strong>Images:</strong>
     <br/>
@@ -57,4 +37,26 @@
   <a href="#top" onmouseover="Tip('Return to top of page')">
     <%= theme_image_tag("icons/16x16/arrow_up.png", options = {:alt=>"Return to top"}) %>
   </a>
+  <span style="position: absolute; right: 0; width: 50%; text-align: right;">
+    <% if show_comment_edit_links %>
+      <%= link_to '[Endorse]', endorse_comment_path(comment_item),
+        html_options = { :class=> "btTxt editButton",
+        :method => :post,
+        :onmouseover => "Tip('Endorse this comment')"} if comment_item.can_endorse? current_user %>
+
+      <%= link_to '[Un-Endorse]', unendorse_comment_path(comment_item),
+        html_options = { :class=> "btTxt editButton",
+        :method => :post,
+        :onmouseover => "Tip('Remove the endorsement for this comment')"} if comment_item.can_unendorse? current_user %>
+
+     <!-- <%= "&nbsp;" if ( comment_item.can_unendorse? current_user or  comment_item.can_endorse? current_user) and can_edit_comment? comment_item %> -->
+      <%= link_to '[Edit]', edit_comment_path(comment_item),
+        html_options = { :class=> "btTxt editButton",
+        :onmouseover => "Tip('Edit this comment')"} if can_edit_comment? comment_item %>
+      <!-- <%= "&nbsp;" if can_edit_comment? comment_item %> -->
+      <%= link_to '[Add Image]', attach_comment_path(comment_item),
+        html_options = { :class=> "btTxt editButton",
+        :onmouseover => "Tip('Add an image to this comment')"} if can_edit_comment? comment_item %>
+    <% end %>
+  </span>
 </div>
