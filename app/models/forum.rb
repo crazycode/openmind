@@ -46,7 +46,7 @@ class Forum < ActiveRecord::Base
   end
   
   def can_edit? user
-    mediators.include? user or (!user.nil? and (user.prodmgr? or user.sysadmin?))
+    mediators.include? user or (user != :false and (user.prodmgr? or user.sysadmin?))
   end 
   
   # Return a list of topics for this forum that have comments which have not yet
