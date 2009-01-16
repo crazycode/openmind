@@ -30,8 +30,10 @@ Topic: <%= truncate @topic.title, 40 %>
 <br/>
 <%=render(:partial => "comments/comment_item", :collection => @topic.comments)%>
 
-<b>Rate this topic: </b><%= ratings_for @topic %>
-<br/>
+<% if logged_in? %>
+  <b>Rate this topic: </b><%= ratings_for @topic %>
+  <br/>
+<% end %>
 <%= link_to "Add Comment", 
   new_comment_path(:id => @topic, :type => 'Topic'),
   html_options = {:class=> "button",
