@@ -113,19 +113,20 @@ class TopicsController < ApplicationController
     @forum = Forum.find(params[:forum_id])
     hits = {}
     session[:forums_search] = params[:search]
-    Topic.find_with_index(params[:search]).each do |topic|
-      hits[topic.id] = TopicHit.new(topic, true) if topic.forum.can_see?(current_user) or prodmgr?
+    Topic.find_by_solr(params[:search], :scores => true).docs.each do |topic|
+      hits[topic.id] = TopicHit.new(topic, true, topic.solr_score) if topic.forum.can_see?(current_user) or prodmgr?
     end
-    TopicComment.find_with_index(params[:search]).each do |comment|
+    TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
       if comment.topic.forum.can_see?(current_user) or prodmgr?
         # first see if topic hit already exists
         topic_hit = hits[comment.topic.id]
         if topic_hit.nil?
-          hit = TopicHit.new(comment.topic, false)
+          hit = TopicHit.new(comment.topic, false, comment.solr_score)
           hit.comments << comment 
           hits[comment.topic.id] = hit
         else
           topic_hit.comments << comment
+          topic_hit.score = comment.solr_score if topic_hit.score < comment.solr_score
         end	
       end
     end

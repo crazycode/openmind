@@ -16,10 +16,9 @@
 #
 
 class TopicComment < Comment
+  acts_as_solr :fields => [:body, {:created_at => :date}]
   belongs_to :topic, :counter_cache => true
   belongs_to :endorser, :class_name => 'User'
-  
-  acts_as_indexed :fields => [ :body ]
   
   validates_presence_of :topic_id
   

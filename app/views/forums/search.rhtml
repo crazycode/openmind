@@ -35,7 +35,7 @@
     <p>
       <label for="search">Search Forums:</label>
       <%= text_field_tag 'search',
-        "",
+        session[:forums_search],
         options = { :id => "forum_search",
         :onmouseover=>"TagToTip('search_help')"} %>
       <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",

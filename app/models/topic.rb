@@ -17,12 +17,14 @@
 
 class Topic < ActiveRecord::Base
   acts_as_taggable
+  acts_as_solr :fields => [:title, {:created_at => :date}], :include => [:comments]
+
   ajaxful_rateable :stars => 5, 
     :allow_update => true,
     :cache_column => :rating_average
   belongs_to :forum
   belongs_to :user
-  has_many :comments, :class_name => "TopicComment", :dependent => :delete_all,
+  has_many :comments, :class_name => "TopicComment", :dependent => :destroy ,
     :order => "id ASC"   
   has_many :user_topic_reads, :dependent => :delete_all
   has_one :last_comment, :class_name => "TopicComment", :order => "id DESC"
@@ -33,8 +35,6 @@ class Topic < ActiveRecord::Base
   validates_presence_of :title, :user
   validates_presence_of :comment_body, :on => :create
   validates_length_of   :title, :within => 5..200, :allow_blank => true
-  
-  acts_as_indexed :fields => [ :title ]
   
   attr_accessor :comment_body
   
