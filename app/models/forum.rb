@@ -24,6 +24,8 @@ class Forum < ActiveRecord::Base
   has_many :comments_by_topic, :source => 'comments', :through => :topics, :order => "topic_id ASC, id ASC"
   belongs_to :link_set
   belongs_to :forum_group
+  belongs_to :power_user_group, :class_name => "Group", :foreign_key => :power_user_group_id
+
   
   validates_presence_of :name
   validates_uniqueness_of :name 

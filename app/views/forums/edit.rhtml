@@ -47,6 +47,11 @@
       <% end %>
     </p>
     <p>
+      <label>Power User Group:</label>
+      <%= form.collection_select :power_user_group_id,
+        Group.findall(true), :id, :name_and_description, { :prompt => "Please select..." } %>
+    </p>
+    <p>
       <label>Restrict to Enterprise Types:</label>
       <% for etype in EnterpriseType.by_sort_value %>
         <span style="display:block;margin-left:10px;">

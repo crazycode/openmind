@@ -27,6 +27,12 @@ class Group < ActiveRecord::Base
   def can_delete?
     true
   end
+
+  def self.findall include_empty = false
+    list = Group.by_name
+    list.insert(0, Group.new(:id => 0, :name => "")) if include_empty
+    list
+  end
   
   def self.list(page, per_page)
     paginate :page => page, :order => 'name ASC', 
@@ -35,5 +41,9 @@ class Group < ActiveRecord::Base
   
   def can_edit? user
    true
+  end
+
+  def name_and_description
+    "#{name}#{":" if description} #{description}"
   end
 end
