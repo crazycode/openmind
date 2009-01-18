@@ -17,7 +17,7 @@
 
 class Topic < ActiveRecord::Base
   acts_as_taggable
-  acts_as_solr :fields => [:title, {:created_at => :date}], :include => [:comments]
+  acts_as_solr :fields => [:title, {:created_at => :date}]
 
   ajaxful_rateable :stars => 5, 
     :allow_update => true,

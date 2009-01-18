@@ -82,7 +82,8 @@ class ForumsController < ApplicationController
       @hits[topic.id] = TopicHit.new(topic, true, topic.solr_score) if topic.forum.can_see?(current_user) or prodmgr?
     end
     TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
-      if comment.topic.forum.can_see?(current_user) or prodmgr?
+      if (comment.topic.forum.can_see?(current_user) or prodmgr?) and
+          (!comment.private or comment.topic.forum.mediators.include? current_user)
         # first see if topic hit already exists
         topic_hit = @hits[comment.topic.id]
         if topic_hit.nil?

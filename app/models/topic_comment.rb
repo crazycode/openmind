@@ -21,6 +21,10 @@ class TopicComment < Comment
   belongs_to :endorser, :class_name => 'User'
   
   validates_presence_of :topic_id
+
+  def can_see? current_user
+    !self.private or topic.forum.mediators.include? current_user
+  end
   
   def can_edit? current_user, role_override=false
     return true if role_override

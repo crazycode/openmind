@@ -18,6 +18,8 @@
     <%= hidden_field_tag(:forum_id, value = @forum.id) %>
     <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
       :onmouseover => "Tip('Search topics and topic comments')"} %>
+    <br/>
+    <%= link_to "search syntax help", "http://lucene.apache.org/java/2_1_0/queryparsersyntax.html", :popup => true %>
   </p>
 <% end %>
 

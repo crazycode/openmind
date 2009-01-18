@@ -83,6 +83,14 @@ class CommentsController < ApplicationController
     redirect_to topic_path(@comment.topic.id, :anchor => @comment.id)
   end
 
+  def privatize
+    make_private params[:id], true
+  end
+
+  def publicize
+    make_private params[:id], false
+  end
+
   def edit
     @comment = Comment.find(params[:id])
   end
@@ -154,5 +162,18 @@ class CommentsController < ApplicationController
       new
       render :action => 'new'
     end
+  end
+
+  def make_private id, private
+    @comment = TopicComment.find(id)
+    unless @comment.topic.forum.mediators.include? current_user
+      flash[:error] = "Cannot make this comment #{private ? "private" : "public"}"
+      redirect_to topic_path(@comment.topic.id)
+      return
+    end
+    @comment.private = private
+    @comment.save!
+    flash[:notice] = "Comment has been made #{private ? "private" : "public"}"
+    redirect_to topic_path(@comment.topic.id, :anchor => @comment.id)
   end
 end

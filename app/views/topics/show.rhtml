@@ -28,7 +28,7 @@ Topic: <%= truncate @topic.title, 40 %>
 
 <%=render(:partial => "topic_heading")%>
 <br/>
-<%=render(:partial => "comments/comment_item", :collection => @topic.comments)%>
+<%=render(:partial => "comments/comment_item", :collection => @topic.comments.find_all{|c| !c.private or @topic.forum.mediators.include? current_user})%>
 
 <% if logged_in? %>
   <b>Rate this topic: </b><%= ratings_for @topic %>

@@ -1,21 +1,23 @@
 ActionController::Routing::Routes.draw do |map|
 
-  # The priority is based upon order of creation: first created -> highest priority.
+  # The priority is based upon order of creation: first created -> highest
+  # priority.
   
-  # Sample of regular route:
-  # map.connect 'products/:id', :controller => 'catalog', :action => 'view'
-  # Keep in mind you can assign values other than :controller and :action
+  # Sample of regular route: map.connect 'products/:id', :controller =>
+  # 'catalog', :action => 'view' Keep in mind you can assign values other than
+  # :controller and :action
 
-  # Sample of named route:
-  # map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
-  # This route can be invoked with purchase_url(:id => product.id)
+  # Sample of named route: map.purchase 'products/:id/purchase', :controller =>
+  # 'catalog', :action => 'purchase' This route can be invoked with
+  # purchase_url(:id => product.id)
   
   map.resources :allocations, :collection => { :export_import => :get,
     :export => :post, :import => :post, :toggle_pix => :get }
   map.resources :announcements, :collection => { :preview => :get, :rss => :get }
   map.resources :attachments, :member => { :download => :get }
   map.resources :comments, :collection => { :preview => :get },
-    :member => { :endorse => :post, :unendorse => :post, :attach => :get }
+    :member => { :endorse => :post, :unendorse => :post, :attach => :get,
+    :privatize => :post, :publicize => :post}
   map.resources :enterprises, :member => { :next => :get, :previous => :get }
   map.resources :forums, :collection => { :search => :get, 
     :rss => :get, :tag => :get }
@@ -42,12 +44,12 @@ ActionController::Routing::Routes.draw do |map|
     :destroy_product_watch => :delete},
     :collection => {:create_from_show => :post }
 
-  # Allow downloading Web Service WSDL as a file with an extension
-  # instead of a file named 'wsdl'
+  # Allow downloading Web Service WSDL as a file with an extension instead of a
+  # file named 'wsdl'
   map.connect ':controller/service.wsdl', :action => 'wsdl'
 
-  # Default home page
-  #map.connect '', :controller => 'ideas', :action => 'index'
+  # Default home page #map.connect '', :controller => 'ideas', :action =>
+  # 'index'
   map.home '', :controller => 'ideas', :action => 'index'
   
   # Install the default route as the lowest priority.

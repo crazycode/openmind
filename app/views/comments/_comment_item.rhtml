@@ -39,6 +39,14 @@ bsturim@scribesoft.com<%content_for :head do -%>
   </a>
   <span style="position: absolute; right: 0; width: 50%; text-align: right;">
     <% if show_comment_edit_links %>
+      <%= link_to '[Make Private]', privatize_comment_path(comment_item),
+        html_options = { :class=> "btTxt editButton",
+        :method => :post,
+        :onmouseover => "Tip('Make this comment only visible to forum mediators')"} if !comment_item.private and comment_item.topic.forum.mediators.include? current_user %>
+      <%= link_to '[Make Public]', publicize_comment_path(comment_item),
+        html_options = { :class=> "btTxt editButton",
+        :method => :post,
+        :onmouseover => "Tip('Make this comment publically visible')"} if comment_item.private and comment_item.topic.forum.mediators.include? current_user %>
       <%= link_to '[Endorse]', endorse_comment_path(comment_item),
         html_options = { :class=> "btTxt editButton",
         :method => :post,
