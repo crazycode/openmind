@@ -96,6 +96,7 @@ class ForumsController < ApplicationController
         end	
       end
     end
+    TopicHit.normalize_scores(@hits.values)
   end
 
   def destroy

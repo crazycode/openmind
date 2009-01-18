@@ -14,4 +14,16 @@ class TopicHit
     @topic = topic
     @score = score
   end
+
+  def self.normalize_scores hits
+    max_score = 0.0
+    for hit in hits
+      max_score = hit.score if hit.score > max_score
+    end
+    return if max_score == 0
+    factor = 100.0/max_score
+    for hit in hits
+      hit.score = hit.score * factor
+    end
+  end
 end

@@ -132,6 +132,7 @@ class TopicsController < ApplicationController
       end
     end
     @hits = hits.values.find_all{ |hit| hit.topic.forum == @forum }
+    TopicHit.normalize_scores(@hits)
   end
   
   def toggle_topic_details_box
