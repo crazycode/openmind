@@ -50,9 +50,11 @@
   <h2>Topics</h2>
 <% end %>
 <% @hits.each_value do |topic_hit| %>
-  <h3><%= link_to highlight(topic_hit.topic.title, session[:forums_search].split, '<span class="highlight">\1</span>'),
-    topic_path(topic_hit.topic.id) %> (forum "<%= topic_hit.topic.forum.name %>") <%= ratings_for topic_hit.topic, :static, :wrap => false %></h3>
-  <%=render(:partial => "comments/comment_item", :collection => topic_hit.comments)%>
+  <h3><%= link_to highlight(topic_hit.topic.title,
+      session[:forums_search].split.delete_if { |x| x == "OR" or x == "AND" or x == "NOT" },
+      '<span class="highlight">\1</span>'),
+      topic_path(topic_hit.topic.id) %> (forum "<%= topic_hit.topic.forum.name %>") <%= ratings_for topic_hit.topic, :static, :wrap => false %></h3>
+    <%=render(:partial => "comments/comment_item", :collection => topic_hit.comments)%>
   <br/>
 <% end %>
 

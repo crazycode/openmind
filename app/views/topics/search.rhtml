@@ -22,7 +22,9 @@
 <% end %>
 
 <% @hits.each do |topic_hit| %>
-  <h3><%= link_to topic_hit.topic.title, topic_path(topic_hit.topic.id) %><%= ratings_for topic_hit.topic, :static, :wrap => false %></h3>
+  <h3><%= link_to highlight(topic_hit.topic.title,
+      session[:forums_search].split.delete_if { |x| x == "OR" or x == "AND" or x == "NOT" },
+      '<span class="highlight">\1</span>'), topic_path(topic_hit.topic.id) %><%= ratings_for topic_hit.topic, :static, :wrap => false %></h3>
   <%=render(:partial => "comments/comment_item", :collection => topic_hit.comments)%>
   <br/>
 <% end %>

@@ -12,7 +12,7 @@ bsturim@scribesoft.com<%content_for :head do -%>
     :class => "floatRight",
     :onmouseover => "Tip('This comment has been endorsed by the forum mediator')") if comment_item.endorsed? %>
   <%= highlight(white_list(comment_item.body),
-    session[:forums_search].split,
+    session[:forums_search].split.delete_if { |x| x == "OR" or x == "AND" or x == "NOT" },
     '<span class="highlight">\1</span>') unless comment_item.textiled %>
   <%= highlight(textilize(white_list(comment_item.body)), session[:forums_search].split, '<span class="highlight">\1</span>') if comment_item.textiled %>
 
