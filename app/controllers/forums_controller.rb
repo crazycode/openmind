@@ -125,7 +125,7 @@ class ForumsController < ApplicationController
   # Build an rss feed to be notified of new announcements
   def rss
     forum = Forum.find(params[:id])
-    render_rss_feed_for forum.comments_by_topic, {
+    render_rss_feed_for forum.comments_by_topic.find_all{|c| !c.private}, {
       :feed => {
         :title => "New OpenMind Comments for Forum \"#{forum.name}\"",
         :link => forum_url(forum.id),
