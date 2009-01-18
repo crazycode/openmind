@@ -76,6 +76,11 @@
     line-height: 1.0em;
 }
 
+.cssform ul.ajaxful-rating {
+    padding:0;
+    border: none
+}
+
 .cssform p:hover, .cssform ul:hover {
     background-color: #f5f5f5;
 }
