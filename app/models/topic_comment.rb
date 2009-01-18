@@ -19,8 +19,18 @@ class TopicComment < Comment
   acts_as_solr :fields => [:body, {:created_at => :date}]
   belongs_to :topic, :counter_cache => true
   belongs_to :endorser, :class_name => 'User'
+  before_create :update_topic_commented_at_on_create
+  before_update :update_topic_commented_at_on_update
   
   validates_presence_of :topic_id
+
+  def update_topic_commented_at_on_create
+    self.topic.update_attribute(:last_commented_at, Time.zone.now) unless private
+  end
+
+  def update_topic_commented_at_on_update
+    update_topic_commented_at_on_create if private_was and !private
+  end
 
   def can_see? current_user
     !self.private or topic.forum.mediators.include? current_user

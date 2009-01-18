@@ -148,6 +148,9 @@ class CommentsController < ApplicationController
     @comment.user_id = current_user.id
     @comment.topic_id = @topic.id
     @comment.endorser = current_user if @topic.forum.mediators.include? current_user
+    if params[:private] == 'yes'
+      @comment.private = true
+    end
     if params[:watch] == 'yes'
       @topic.watchers << current_user
     end
