@@ -7,10 +7,10 @@
   <td><%= bold_text(nvl(topic_item.user_topic_reads.sum(:views), '-'), topic_item.unread_comment?(current_user)) %></td>
   <td><div id="topic_watchers<%= topic_item.id %>"><%= topic_item.watchers.size %></div></td>
   <td>
-    <%= topic_item.rate_average %>
     <!--
-    <%= ratings_for topic_item, :static, :wrap => false, :small_stars => false %>
+    <%= topic_item.rate_average %>
     -->
+    <%= ratings_for topic_item, :static, :wrap => false, :small_stars => false %>
   </td>
   <td><%= last_topic_post topic_item %></td>
   <td style="white-space:nowrap;">
