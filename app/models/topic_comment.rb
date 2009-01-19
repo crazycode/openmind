@@ -25,11 +25,14 @@ class TopicComment < Comment
   validates_presence_of :topic_id
 
   def update_topic_commented_at_on_create
-    self.topic.update_attribute(:last_commented_at, Time.zone.now) unless private
+    unless private
+      self.topic.update_attribute(:last_commented_at, Time.zone.now)
+      self.published_at = Time.zone.now
+    end
   end
 
   def update_topic_commented_at_on_update
-    update_topic_commented_at_on_create if private_was and !private
+    update_topic_commented_at_on_create if !private and published_at.nil?
   end
 
   def can_see? current_user

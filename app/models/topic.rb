@@ -89,7 +89,7 @@ class Topic < ActiveRecord::Base
           "and exists (" +
           "select null " +
           "from topic_watches as tw " +
-          "where tw.last_checked_at < comments.created_at " +
+          "where tw.last_checked_at < comments.published_at " +
           " and tw.topic_id = comments.topic_id " +
           "and tw.user_id = ?)", id, user.id],
       :order => "comments.id DESC")
@@ -107,12 +107,12 @@ class Topic < ActiveRecord::Base
           "(SELECT NULL FROM topic_watches AS tw " +
           "INNER JOIN topics AS t ON t.id = tw.topic_id " +
           "WHERE tw.user_id = users.id " +
-          "AND t.updated_at > tw.last_checked_at)"])
+          "AND t.last_commented_at > tw.last_checked_at)"])
 
     for user in users.find_all{|u| u.active and !u.activated_at.nil?}
       # puts "user #{user.email}"
       tws = TopicWatch.find_all_by_user_id(user, :include => "topic",
-        :conditions => "topics.updated_at > topic_watches.last_checked_at",
+        :conditions => "topics.last_commented_at > topic_watches.last_checked_at",
         :order => "topics.forum_id")
       topics = tws.find_all{|tw| tw.topic.forum.can_see? user}.collect(&:topic)
       topics = topics.find_all{ |topic| !topic.unread_comments(user).empty? }
