@@ -74,6 +74,10 @@ class Topic < ActiveRecord::Base
     read.views += 1
     read
   end
+
+  def mediator? user
+    forum.mediator? user
+  end
   
   def unread_comments user
     TopicComment.find(:all,

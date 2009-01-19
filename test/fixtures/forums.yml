@@ -18,6 +18,7 @@ bugs_forum:
   mediators: allroles
   description: A forum to discuss product defects and work arounds
   restrict_topic_creation: false
+  power_user_group: bob
 
 bugs_forum_restrict_creation:
   name: bugs_forum restricted

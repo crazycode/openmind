@@ -57,5 +57,9 @@
       <label for="forum_group">Forum Group:</label>
       <%= @forum.forum_group.short_name unless @forum.forum_group.nil? %>
     </p>
+    <p>
+      <label for="power_user_group">Power User Group:</label>
+      <%= @forum.power_user_group.name unless @forum.power_user_group.nil? %>
+    </p>
   <% end %>
 </div>

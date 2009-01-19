@@ -17,7 +17,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :attachments, :member => { :download => :get }
   map.resources :comments, :collection => { :preview => :get },
     :member => { :endorse => :post, :unendorse => :post, :attach => :get,
-    :privatize => :post, :publicize => :post}
+    :privatize => :post, :publicize => :post, :promote_power_user => :post }
   map.resources :enterprises, :member => { :next => :get, :previous => :get }
   map.resources :forums, :collection => { :search => :get, 
     :rss => :get, :tag => :get }

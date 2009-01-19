@@ -6,7 +6,7 @@ class ForumTest < Test::Unit::TestCase
 
   should_have_many :topics, :dependent => :delete_all
   should_have_many :comments, :comments_by_topic
-  should_belong_to :link_set, :forum_group
+  should_belong_to :link_set, :forum_group, :power_user_group
   should_have_and_belong_to_many :mediators, :watchers, :groups, 
     :enterprise_types
   should_require_attributes :description
@@ -31,6 +31,12 @@ class ForumTest < Test::Unit::TestCase
     
     should "allow not edit" do
       assert !forums(:bugs_forum).can_edit?(users(:quentin))
+    end
+  end
+
+  context "testing power_user?" do
+    should "indicate no for no power_user on forum" do
+      assert !forums(:bugs_forum_restrict_creation).power_user?(users(:quentin))
     end
   end
   

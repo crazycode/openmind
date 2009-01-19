@@ -2,11 +2,12 @@ class CommentsController < ApplicationController
   helper :ideas
   
   before_filter :login_required
-  access_control [:edit, :update, :destroy] => 'prodmgr | voter'
+  access_control [:edit, :update, :destroy] => 'prodmgr | voter',
+    [:promote_power_user] => 'mediator'
    
   # GETs should be safe (see
   # http://www.w3.org/2001/tag/doc/whenToUseGet.html)c/whenToUseGet.html)
-  verify :method => :post, :only => [:create ],
+  verify :method => :post, :only => [:create,:promote_power_user ],
     :redirect_to =>{ :controller => 'ideas', :action => :index }
   verify :method => :put, :only => [ :update ],
     :redirect_to => { :controller => 'ideas', :action => :index }
@@ -73,7 +74,6 @@ class CommentsController < ApplicationController
     @comment = TopicComment.find(params[:id])
     unless @comment.can_unendorse? current_user
       flash[:error] = "Cannot unendorse this comment"
-      flash[:notice] = "Endorsement has been removed"
       redirect_to topic_path(@comment.topic.id, :anchor => @comment.id)
       return
     end
@@ -112,6 +112,20 @@ class CommentsController < ApplicationController
   def destroy
     IdeaComment.find(params[:id]).destroy
     redirect_to comments_path
+  end
+
+  def promote_power_user
+    comment = TopicComment.find(params[:id])
+    if !comment.topic.mediator? current_user
+      flash[:error] = "Only mediators can promote a power user"
+    elsif comment.topic.forum.power_user? comment.user
+      flash[:error] = "User is already a power user for this forum"
+    else
+      comment.topic.forum.power_user_group.users << comment.user
+      comment.topic.forum.power_user_group.save
+      flash[:notice] = "User has been promoted to a power user for this forum"
+    end
+    redirect_to topic_path(comment.topic.id, :anchor => comment.id)
   end
   
   private

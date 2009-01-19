@@ -74,6 +74,15 @@ class Forum < ActiveRecord::Base
       topic.save
     end
   end
+
+  def power_user? user
+    return false if power_user_group.nil?
+    power_user_group.users.include? user
+  end
+
+  def mediator? user
+    mediators.include? user
+  end
   
   def can_see? user
     return true if user != :false and (user.prodmgr? or user.sysadmin?)
