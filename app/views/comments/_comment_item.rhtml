@@ -33,7 +33,11 @@
 </div>
 <div class="commentfooter">
   Posted by <%= "#{user_display_name comment_item.user}" %>
-  <%= " <b><i>(Power User)</i></b> " if comment_item.class.to_s == "TopicComment" and comment_item.topic.forum.power_user? comment_item.user %>
+  <%= theme_image_tag("icons/16x16/power_user.png",
+    :alt=>"Power User",
+    :title=> "endorsed",
+    :class => "Power User",
+    :onmouseover => "Tip('This user is a Power User')") if comment_item.class.to_s == "TopicComment" and comment_item.topic.forum.power_user? comment_item.user %>
   on <%=  om_date_time comment_item.created_at %>
   <a href="#top" onmouseover="Tip('Return to top of page')">
     <%= theme_image_tag("icons/16x16/arrow_up.png", options = {:alt=>"Return to top"}) %>
