@@ -152,7 +152,7 @@ class ForumsController < ApplicationController
     Topic.find_tagged_with(@tags).each do |topic|
       if (topic.forum.can_see?(current_user) or prodmgr?) and
           (@forum.nil? or @forum.id == topic.forum.id)
-        @hits[topic.id] = TopicHit.new(topic, true)
+        @hits[topic.id] = TopicHit.new(topic, true, 100)
       end
     end
     render :action => :search
