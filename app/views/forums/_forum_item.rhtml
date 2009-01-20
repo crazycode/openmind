@@ -9,8 +9,8 @@
     <td>
       <%= forum_item.topics.count %> (<%= forum_item.unread_topics(current_user).size %>)
     </td>
-    <td><%= last_forum_post forum_item %></td>
     <td><%= forum_item.comments.count - forum_item.topics.count %></td>
+    <td><%= last_forum_post forum_item %></td>
     <td style="white-space:nowrap;">
       <%=render(:partial => "forum_action", :object => forum_item)%>
     </td>
