@@ -98,7 +98,7 @@ class AllocationsController < ApplicationController
   
   # Generate a csv file of users and enterprises
   def export
-    users = User.active_voters
+    users = User.active.voters
     enterprises = Enterprise.find(:all, :order => "name ASC")
     CsvUtils.setup_request_for_csv headers, request, "allocations"
     stream_csv do |csv|
