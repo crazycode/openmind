@@ -17,9 +17,8 @@ class TopicsController < ApplicationController
     @forum ||= Forum.find(params[:forum_id])
     
     unless @forum.can_see? current_user or prodmgr?
-      flash[:error] = ForumsController.forum_access_denied(current_user)
-      redirect_to forums_path
-      return
+      flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
+        redirect_to redirect_path_on_access_denied(current_user)
     end
     
     @topic ||= Topic.new(:forum => @forum)
@@ -69,8 +68,8 @@ class TopicsController < ApplicationController
     Topic.transaction do
       @topic = Topic.find(params[:id])
       unless @topic.forum.can_see? current_user or prodmgr?
-        flash[:error] = ForumsController.forum_access_denied(current_user)
-        redirect_to forums_path
+        flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
+        redirect_to redirect_path_on_access_denied(current_user)
       end
       @topic.add_user_read(current_user).save unless current_user == :false
     end
@@ -89,8 +88,8 @@ class TopicsController < ApplicationController
     @topic = Topic.find(params[:id])
     
     unless @topic.forum.can_edit? current_user or prodmgr?
-      flash[:error] = ForumsController.forum_access_denied(current_user)
-      redirect_to forums_path
+      flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
+        redirect_to redirect_path_on_access_denied(current_user)
     end
   end
 
@@ -98,8 +97,8 @@ class TopicsController < ApplicationController
     @topic = Topic.find(params[:id])
 
     unless @topic.forum.can_edit? current_user or prodmgr?
-      flash[:error] = ForumsController.forum_access_denied(current_user)
-      redirect_to forums_path
+      flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
+        redirect_to redirect_path_on_access_denied(current_user)
     end
     if @topic.update_attributes(params[:topic])
       flash[:notice] = "Topic '#{@topic.title}' was successfully updated."
@@ -163,6 +162,11 @@ class TopicsController < ApplicationController
 
   
   private
+  
+  def redirect_path_on_access_denied user
+      return forums_path unless user == :false
+      return url_for :controller => 'account', :action => 'login', :only_path => true if user == :false
+  end
   
   def do_rjs_toggle_topic_details_box 
     render :update do |page|

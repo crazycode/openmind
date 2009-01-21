@@ -313,10 +313,6 @@ class Idea < ActiveRecord::Base
   
   # Create a vote, if possible, against a list of allocations
   def allocation_votes(allocations, user)
-    # TODO: We probably want to add a flag to the allocations table to allow
-    #       us to not have to iterate through every allocation to find one with
-    #       open votes
-    # 
     #  Loop through allocations looking for an open allocation, oldest first
     for allocation in allocations
       if allocation.available_quantity > 0

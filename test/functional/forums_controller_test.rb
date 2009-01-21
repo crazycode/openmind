@@ -111,8 +111,8 @@ class ForumsControllerTest < Test::Unit::TestCase
   
   def test_access_denied
     assert_equal "You must be logged on to access this forum", 
-      ForumsController.forum_access_denied(:false)
+      ForumsController.flash_for_forum_access_denied(:false)
     assert_equal "You have insuffient permissions to access this forum", 
-      ForumsController.forum_access_denied(users(:quentin))
+      ForumsController.flash_for_forum_access_denied(users(:quentin))
   end
 end

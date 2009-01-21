@@ -47,8 +47,8 @@ class WatchesController < ApplicationController
       @forum = Forum.find(params[:id])
       
       unless @forum.can_see? current_user or prodmgr?
-        flash[:error] = ForumsController.forum_access_denied(current_user)
-        redirect_to forums_path
+        flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
+        redirect_to redirect_path_on_access_denied(current_user)
       end
       
       @forum.watchers << current_user unless @forum.watchers.include? current_user
@@ -78,8 +78,8 @@ class WatchesController < ApplicationController
       @topic = Topic.find(params[:id])
       
       unless @topic.forum.can_see? current_user or prodmgr?
-        flash[:error] = ForumsController.forum_access_denied(current_user)
-        redirect_to forums_path
+        flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
+        redirect_to redirect_path_on_access_denied(current_user)
       end
       
       @topic.watchers << current_user unless @topic.watchers.include? current_user
@@ -156,8 +156,8 @@ class WatchesController < ApplicationController
       @forum = Forum.find(params[:id])
       
       unless @forum.can_see? current_user or prodmgr?
-        flash[:error] = ForumsController.forum_access_denied(current_user)
-        redirect_to forums_path
+        flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
+        redirect_to redirect_path_on_access_denied(current_user)
       end
       
       @forum.watchers.delete(current_user)
@@ -209,8 +209,8 @@ class WatchesController < ApplicationController
       @topic = Topic.find(params[:id])
       
       unless @topic.forum.can_see? current_user or prodmgr?
-        flash[:error] = ForumsController.forum_access_denied(current_user)
-        redirect_to forums_path
+        flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
+        redirect_to redirect_path_on_access_denied(current_user)
       end
       
       @topic.watchers.delete(current_user)
@@ -234,6 +234,11 @@ class WatchesController < ApplicationController
   end
     
   private
+
+  def redirect_path_on_access_denied user
+    return forums_path unless user == :false
+    return url_for :controller => 'account', :action => 'login', :only_path => true if user == :false
+  end
     
   def do_idea_action from="list"
     render :update do |page|

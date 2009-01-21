@@ -24,8 +24,8 @@ class ForumsController < ApplicationController
       current_user == :false ? 10 : current_user.row_limit, 
       @forum
     unless @forum.can_see? current_user or prodmgr?
-      flash[:error] = ForumsController.forum_access_denied(current_user)
-      redirect_to forums_path
+      flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
+      redirect_to redirect_path_on_access_denied current_user
     end
   end
   
@@ -140,7 +140,7 @@ class ForumsController < ApplicationController
     }
   end
   
-  def self.forum_access_denied user
+  def self.flash_for_forum_access_denied user
     return "You must be logged on to access this forum" if user == :false
     return "You have insuffient permissions to access this forum" unless user == :false    
   end
@@ -159,6 +159,11 @@ class ForumsController < ApplicationController
   end
   
   private
+  
+  def redirect_path_on_access_denied user
+      return forums_path unless user == :false
+      return url_for :controller => 'account', :action => 'login', :only_path => true if user == :false
+  end
   
   def do_rjs_toggle_forum_details_box 
     render :update do |page|

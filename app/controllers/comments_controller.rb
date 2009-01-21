@@ -33,6 +33,11 @@ class CommentsController < ApplicationController
     else
       @topic = Topic.find(params[:id]) 
       @comment ||= TopicComment.new
+
+      unless @topic.forum.can_see? current_user or prodmgr?
+        flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
+        redirect_to redirect_path_on_access_denied(current_user)
+      end
     end
   end
   
@@ -93,6 +98,12 @@ class CommentsController < ApplicationController
 
   def edit
     @comment = Comment.find(params[:id])
+    if @comment.class.to_s == 'TopicComment'
+      unless @comment.topic.forum.can_see? current_user or prodmgr?
+        flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
+        redirect_to redirect_path_on_access_denied(current_user)
+      end
+    end
   end
 
   def update
@@ -129,6 +140,11 @@ class CommentsController < ApplicationController
   end
   
   private
+
+  def redirect_path_on_access_denied user
+    return forums_path unless user == :false
+    return url_for :controller => 'account', :action => 'login', :only_path => true if user == :false
+  end
 
   def create_idea_comment
     @idea = Idea.find(params[:id])
