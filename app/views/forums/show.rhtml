@@ -37,7 +37,8 @@
     <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
       :onmouseover => "Tip('Search topics and topic comments')"} %>
     <br/>
-    <%= link_to "search syntax help", "http://lucene.apache.org/java/2_1_0/queryparsersyntax.html", :popup => true %>
+    <%= link_to "search syntax help", {:controller => 'static', :action => 'search'},
+      :popup => true %>
   </p>
 <% end %>
 

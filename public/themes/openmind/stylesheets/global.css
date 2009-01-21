@@ -348,6 +348,13 @@ ul#headerLowerNavMenu  {
     padding-right:15px;
 }
 
+/********* Sample Text *************/
+.sample {
+    font-family: monospace;
+    font-size: x-large;
+    padding: 10px
+}
+
 /********* Comment Boxes ***********/
 .commentbox {
     font-size: 1em; /* 11px*/
