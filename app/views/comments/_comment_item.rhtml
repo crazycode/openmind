@@ -65,7 +65,7 @@
         <%= link_to '[Promote User]', promote_power_user_comment_path(comment_item),
           html_options = { :class=> "btTxt editButton",
           :method => :post,
-          :onmouseover => "Tip('Promote the author of this comment to be a power user for this forum')"} unless comment_item.topic.forum.power_user_group.nil? or comment_item.topic.forum.power_user? comment_item.user %>
+          :onmouseover => "Tip('Promote the author of this comment to be a power user for this forum')"} unless current_user == :false or comment_item.topic.forum.power_user_group.nil? or comment_item.topic.forum.power_user? comment_item.user %>
       <% end %>
 
       <!-- <%= "&nbsp;" if ( comment_item.can_unendorse? current_user or comment_item.can_endorse? current_user) and can_edit_comment? comment_item %> -->

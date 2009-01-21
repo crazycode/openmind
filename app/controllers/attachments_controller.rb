@@ -13,16 +13,24 @@ class AttachmentsController < ApplicationController
     :redirect_to => { :action => :index }
 
   def index
+    @attachment ||= Attachment.new(:public => true)
     @attachments = Attachment.list params[:page], current_user.row_limit
   end
 
   def edit
     @attachment = Attachment.find(params[:id])
+    unless @attachment.parent.nil?
+      flash[:error] = "Cannot edit thumbnail information"
+      redirect_to attachments_path
+    end
   end
 
   def update
     @attachment = Attachment.find(params[:id])
     if @attachment.update_attributes(params[:attachment])
+      unless from_comment? params
+        @attachment.public = (params[:attachment][:public] == "true")
+      end
       flash[:notice] = "Attachment '#{@attachment.filename}' was successfully updated."
       redirect_to attachment_path(@attachment)
     else
@@ -47,8 +55,12 @@ class AttachmentsController < ApplicationController
 
   def download
     @attachment = Attachment.find(params[:id])
-    send_data @attachment.data, :filename => @attachment.filename,
-      :type => @attachment.content_type
+    if !@attachment.public and current_user == :false
+      flash[:error] = 'You must log on to see the attachment'
+      redirect_to :controller => 'account', :action => 'login'
+    else
+      send_data @attachment.data, :filename => @attachment.filename
+    end
   end
 
   def create
@@ -79,6 +91,8 @@ class AttachmentsController < ApplicationController
           "Upload exceeds maximum file size of #{number_to_human_size(APP_CONFIG['max_file_upload_size'].to_i * 1024)}"
         return
       end
+    else
+      @attachment.public = (params[:attachment][:public] == "true")
     end
     Attachment.transaction do
       if @attachment.save

@@ -9,6 +9,7 @@ require 'RMagick'
 class Attachment < ActiveRecord::Base
   include Magick
   after_create :create_thumbnail
+  before_update :before_update
   
   validates_presence_of :filename, :description, :content_type, :size
   belongs_to :user
@@ -81,7 +82,19 @@ class Attachment < ActiveRecord::Base
         :parent => self,
         :content_type => self.content_type,
         :size => thumbnail_data.size)
+      thumbnail_image.public = self.public
       thumbnail_image.save!
+    end
+  end
+
+  def before_update
+    # if a thumbnail, do nothing...avoid infinite recursion
+    return unless self.parent.nil?
+
+    #won't have a thumbnail if not an image'
+    unless self.thumbnail.nil?
+      self.thumbnail.public = self.public
+      self.thumbnail.save!
     end
   end
 

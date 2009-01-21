@@ -5,9 +5,9 @@
 <%= error_messages_for 'attachment' %>
 <% form_for :attachment, :url => attachment_path(@attachment), 
   :html => {:method => :put } do |form| %>
-  <div class="formTitle"><%= theme_image_tag("icons/16x16/paperclip.png", 
+  <div class="formTitle"><%= theme_image_tag("icons/16x16/paperclip.png",
       options = {:alt=>"attachment"}) %>
-  Edit Attachment
+    Edit Attachment
   </div>
   <div class="cssform">
     <p>
@@ -15,8 +15,14 @@
       <%= @attachment.filename %>
     </p>
     <p>
-      <label for="attachment_name">Description</label>
+      <label for="attachment_name">Description:</label>
       <%= form.text_field :description, { :size => 50, :maxlength => 200 } %>
+    </p>
+    <p>
+      <label for="attachment_public">Public:</label>
+      <td class="center"><%= form.check_box :public,
+          {:onmouseover => "Tip('Public attachments can be viewed even if a user is not logged in')"},
+          "true", "false" %></td>
     </p>
     <%= render(:partial => "details") %>
     <p>

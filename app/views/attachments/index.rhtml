@@ -9,6 +9,7 @@
     <tr>
       <th>File Name</th>
       <th>Description</th>
+      <th>Public</th>
       <th>Filesize</th>
       <th>Type</th>
       <th>Author</th>
@@ -27,6 +28,9 @@
           <% end %>
         </td>
         <td><%= form.text_field :description, { :size => 30, :maxlength => 200 } %></td>
+        <td class="center"><%= form.check_box :public,
+            {:onmouseover => "Tip('Public attachments can be viewed even if a user is not logged in')"},
+            "true", "false" %></td>
         <td>-</td>
         <td>-</td>
         <td>-</td>
