@@ -45,7 +45,7 @@ class Topic < ActiveRecord::Base
   def self.list(page, per_page, forum)
     paginate :page => page, 
       :conditions => ["forum_id = ?", forum.id],
-      :order => "pinned DESC, updated_at DESC", 
+      :order => "pinned DESC, last_commented_at DESC",
       :per_page => per_page
   end
   
