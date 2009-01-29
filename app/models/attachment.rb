@@ -12,6 +12,7 @@ class Attachment < ActiveRecord::Base
   before_update :before_update
   
   validates_presence_of :filename, :description, :content_type, :size
+  validates_length_of :filename, :maximum => 200
   belongs_to :user
   has_one :thumbnail, :class_name => 'Attachment', 
     :foreign_key => :parent_attachment_id, :dependent => :delete
