@@ -4,7 +4,8 @@ module ForumsHelper
   end  
     
   def last_forum_post forum
-    last_comment = forum.comments.first #this isn't very efficient...replace by sql?
+    last_comment = forum.comments.public.most_recent.first unless forum.mediators.include? current_user
+    last_comment = forum.comments.most_recent.first if forum.mediators.include? current_user
     return '-' if last_comment.nil?
     subject = ""
     subject += "RE: " if forum.comments.size > 1
