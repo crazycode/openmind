@@ -50,7 +50,7 @@ class TopicsController < ApplicationController
         redirect_to attach_comment_path(comment)
       else
         flash[:notice] = "Topic #{@topic.title} was successfully created."
-        redirect_to forum_path(forum_id)
+        redirect_to topic_path(@topic.id)
       end
     else
       @forum = Forum.find(forum_id)
