@@ -1,6 +1,6 @@
 class CreateRates < ActiveRecord::Migration
   def self.up
-    create_table :rates do |t|
+    create_table :rates, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.references :user
       t.references :rateable, :polymorphic => true
       t.integer :stars

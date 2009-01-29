@@ -1,6 +1,6 @@
 class CreateTopicImport < ActiveRecord::Migration
   def self.up
-    create_table :topic_imports do |t|
+    create_table :topic_imports, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.string :forum_name, :limit => 50, :null => false
       t.string :topic_title, :limit => 200, :null => false
       t.string :user_email, :null => false
