@@ -32,6 +32,7 @@ class Forum < ActiveRecord::Base
   validates_presence_of :description
   validates_length_of   :name, :maximum => 50
   validates_length_of   :description, :maximum => 150
+  validates_numericality_of :display_order, :only_integer => true, :allow_nil => true
   
   def can_delete?
     topics.empty?
@@ -43,8 +44,8 @@ class Forum < ActiveRecord::Base
   end
   
   def self.list_by_forum_group forum_group=nil
-    return Forum.find(:all, :conditions => ["forum_group_id is null"], :order => 'name ASC') if forum_group.nil?
-    Forum.find_all_by_forum_group_id(forum_group.id, :order => 'name ASC')
+    return Forum.find(:all, :conditions => ["forum_group_id is null"], :order => 'display_order ASC, name ASC') if forum_group.nil?
+    Forum.find_all_by_forum_group_id(forum_group.id, :order => 'display_order ASC, name ASC')
   end
 
   def self.list_visible user

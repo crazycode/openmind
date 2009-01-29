@@ -7,6 +7,10 @@
   </p>
   <% if can_edit? @forum %>
     <p>
+      <label for="display_order">Display Order:</label>
+      <%= @forum.display_order %>
+    </p>
+    <p>
       <label>Active:</label>
       <%= @forum.active %>
     </p>
