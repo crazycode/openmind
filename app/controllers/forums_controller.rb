@@ -124,10 +124,11 @@ class ForumsController < ApplicationController
     end
   end
 
-  # Build an rss feed to be notified of new announcements
+  # Build an rss feed to be notified of new forum postings
   def rss
     forum = Forum.find(params[:id])
-    render_rss_feed_for forum.comments_by_topic.find_all{|c| !c.private}, {
+    comments = forum.comments_by_topic.find_all{|c| !c.private and forum.can_see? current_user}
+    render_rss_feed_for comments, {
       :feed => {
         :title => "New OpenMind Comments for Forum \"#{forum.name}\"",
         :link => forum_url(forum.id),
@@ -162,8 +163,8 @@ class ForumsController < ApplicationController
   private
   
   def redirect_path_on_access_denied user
-      return forums_path unless user == :false
-      return url_for :controller => 'account', :action => 'login', :only_path => true if user == :false
+    return forums_path unless user == :false
+    return url_for :controller => 'account', :action => 'login', :only_path => true if user == :false
   end
   
   def do_rjs_toggle_forum_details_box 
