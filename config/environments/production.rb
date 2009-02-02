@@ -1,5 +1,9 @@
 # Settings specified here will take precedence over those in config/environment.rb
 
+# uncomment the following if you wish to use gmail
+# require 'tlsmail'
+# Net::SMTP.enable_tls(OpenSSL::SSL::VERIFY_NONE)
+
 # The production environment is meant for finished, "live" apps.
 # Code is not reloaded between requests
 config.cache_classes = true
@@ -16,11 +20,3 @@ config.action_controller.perform_caching             = true
 
 # Disable delivery errors, bad email addresses will be ignored
 # config.action_mailer.raise_delivery_errors = false
-ActionMailer::Base.smtp_settings = {
-    :address => 'smtp.gmail.com',
-    :port => 587,
-    :domain => 'sturim.org',
-    :authentication => :plain,
-    :user_name => 'openmind@gmail.com',
-    :password => '0p3nm1nd!'
-}
