@@ -62,7 +62,7 @@ class Topic < ActiveRecord::Base
   end
   
   def unread_comment? user
-    read = UserTopicRead.find_by_user_id_and_topic_id(user.id, id)
+    read = UserTopicRead.find_by_user_id_and_topic_id(user_id, id)
     return false if last_comment.nil? # should never occur
     return true if read.nil?
     read.updated_at < last_comment.created_at
