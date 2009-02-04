@@ -86,7 +86,12 @@ class ForumsController < ApplicationController
   def search
     @hits = {}
     session[:forums_search] = params[:search]
-    Topic.find_by_solr(params[:search], :scores => true).docs.each do |topic|
+    search_results = Topic.find_by_solr(params[:search], :scores => true)
+    if search_results.nil?
+      redirect_to forums_path
+      return
+    end
+    search_results.docs.each do |topic|
       @hits[topic.id] = TopicHit.new(topic, true, topic.solr_score) if topic.forum.can_see?(current_user) or prodmgr?
     end
     TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
