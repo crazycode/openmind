@@ -1,8 +1,8 @@
 # == Schema Information
 # Schema version: 20081021172636
-# 
+#
 # Table name: forums
-# 
+#
 #  id           :integer(4)      not null, primary key
 #  name         :string(50)      not null
 #  description  :string(150)     not null
@@ -11,7 +11,7 @@
 #  updated_at   :datetime        not null
 #  active       :boolean(1)      default(TRUE), not null
 #  link_set_id  :integer(4)
-# 
+#
 
 class Forum < ActiveRecord::Base
   has_many :topics, :order => "pinned DESC, last_commented_at DESC", :dependent => :delete_all
@@ -73,6 +73,14 @@ class Forum < ActiveRecord::Base
     for topic in topics
       topic.watchers.delete(user) if topic.watchers.include? user
       topic.save
+    end
+  end
+
+  def mark_all_topics_as_read user
+    Topic.transaction do
+      for topic in topics
+        topic.add_user_read user, false
+      end
     end
   end
 

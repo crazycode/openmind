@@ -68,13 +68,15 @@ class Topic < ActiveRecord::Base
     read.updated_at < last_comment.created_at
   end
   
-  def add_user_read user
+  def add_user_read user, update_view_count=true
     read = UserTopicRead.find_by_user_id_and_topic_id(user.id, self.id, :lock => true)
     if read.nil?
       read = UserTopicRead.new(:user_id => user.id)
       user_topic_reads << read
     end
-    read.views += 1
+    read.views += 1 if update_view_count
+    read.dummy += 1 unless update_view_count
+    read.save
     read
   end
 

@@ -20,7 +20,7 @@ ActionController::Routing::Routes.draw do |map|
     :privatize => :post, :publicize => :post, :promote_power_user => :post }
   map.resources :enterprises, :member => { :next => :get, :previous => :get }
   map.resources :forums, :collection => { :search => :get, 
-    :rss => :get, :tag => :get }
+    :rss => :get, :tag => :get }, :member => { :mark_all_as_read => :post }
   map.resources :groups
   map.resources :link_sets, :member => { :update_sort => :post }
   map.resources :lookup_codes

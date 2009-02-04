@@ -5,7 +5,7 @@ class ForumsController < ApplicationController
   helper :topics
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [:create ],
+  verify :method => :post, :only => [:create, :mark_all_as_read ],
     :redirect_to => { :action => :index }
   verify :method => :put, :only => [ :update ],
     :redirect_to => { :action => :index }
@@ -26,7 +26,7 @@ class ForumsController < ApplicationController
       (@forum.mediators.include? current_user))
     unless @forum.can_see? current_user or prodmgr?
       flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
-      redirect_to redirect_path_on_access_denied current_user
+      redirect_to redirect_path_on_access_denied(current_user)
     end
   end
   
@@ -74,6 +74,13 @@ class ForumsController < ApplicationController
     else
       render :action => :edit
     end
+  end
+
+  def mark_all_as_read
+    @forum = Forum.find(params[:id])
+    @forum.mark_all_topics_as_read current_user
+    flash[:notice] = "All topics have been marked as read"
+    redirect_to forum_path(@forum.id)
   end
   
   def search
@@ -164,7 +171,7 @@ class ForumsController < ApplicationController
   
   def redirect_path_on_access_denied user
     return forums_path unless user == :false
-    return url_for :controller => 'account', :action => 'login', :only_path => true if user == :false
+    return url_for(:controller => 'account', :action => 'login', :only_path => true) if user == :false
   end
   
   def do_rjs_toggle_forum_details_box 
