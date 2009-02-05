@@ -112,6 +112,8 @@ class TopicsController < ApplicationController
     @forum = Forum.find(params[:forum_id])
     hits = {}
     session[:forums_search] = params[:search]
+    # solr barfs if search string starts with a wild card...so strip it out
+    params[:search] = params[:search].gsub(/^[\s\*?]*/, "") unless params[:search].nil?
     search_results = Topic.find_by_solr(params[:search], :scores => true)
     if search_results.nil?
       redirect_to forum_path(@forum)
