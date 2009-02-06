@@ -125,6 +125,8 @@ class AccountController < ApplicationController
   
   def logged_in
     self.current_user.user_logons.create
+    # put the current user's email in the session for ease of debugging
+    session[:current_user] = current_user.email
     if params[:remember_me] == "1"
       self.current_user.remember_me
       cookies.delete :auth_token
