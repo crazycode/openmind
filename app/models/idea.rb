@@ -294,6 +294,11 @@ class Idea < ActiveRecord::Base
   def watched? user
     watchers.include? user
   end
+
+  def self.send_reminder_to_vote idea_id
+    idea = Idea.find(idea_id)
+    EmailNotifier.deliver_reminder_to_vote(idea_id) unless idea.votes.collect(&:user).include? idea.user
+  end
   
   private
   

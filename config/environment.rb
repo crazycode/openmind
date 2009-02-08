@@ -75,7 +75,7 @@ Rails::Initializer.run do |config|
 
   # See Rails::Configuration for more options
   config.active_record.observers = :user_observer, :comment_observer, 
-    :allocation_observer, :user_request_observer
+    :allocation_observer, :user_request_observer, :idea_observer
 end
 
 # Add new mime types for use in respond_to blocks: Mime::Type.register
