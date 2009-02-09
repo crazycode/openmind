@@ -88,27 +88,37 @@ class ForumsController < ApplicationController
     session[:forums_search] = params[:search]
     # solr barfs if search string starts with a wild card...so strip it out
     params[:search] = params[:search].gsub(/^[\s\*?]*/, "") unless params[:search].nil?
-    search_results = Topic.find_by_solr(params[:search], :scores => true)
-    if search_results.nil?
-      redirect_to forums_path
-      return
-    end
-    search_results.docs.each do |topic|
-      @hits[topic.id] = TopicHit.new(topic, true, topic.solr_score) if topic.forum.can_see?(current_user) or prodmgr?
-    end
-    TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
-      if (comment.topic.forum.can_see?(current_user) or prodmgr?) and
-          (!comment.private or comment.topic.forum.mediators.include? current_user)
-        # first see if topic hit already exists
-        topic_hit = @hits[comment.topic.id]
-        if topic_hit.nil?
-          hit = TopicHit.new(comment.topic, false, comment.solr_score)
-          hit.comments << comment   
-          @hits[comment.topic.id] = hit
-        else
-          topic_hit.comments << comment
-          topic_hit.score = comment.solr_score if topic_hit.score < comment.solr_score
-        end	
+    
+    begin
+      search_results = Topic.find_by_solr(params[:search], :scores => true)
+    rescue RuntimeError => e
+      flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
+      logger.error(e)
+    else
+      # not sure why this is necessary
+      flash[:error] = nil
+      
+      if search_results.nil?
+        redirect_to forums_path
+        return
+      end
+      search_results.docs.each do |topic|
+        @hits[topic.id] = TopicHit.new(topic, true, topic.solr_score) if topic.forum.can_see?(current_user) or prodmgr?
+      end
+      TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
+        if (comment.topic.forum.can_see?(current_user) or prodmgr?) and
+            (!comment.private or comment.topic.forum.mediators.include? current_user)
+          # first see if topic hit already exists
+          topic_hit = @hits[comment.topic.id]
+          if topic_hit.nil?
+            hit = TopicHit.new(comment.topic, false, comment.solr_score)
+            hit.comments << comment
+            @hits[comment.topic.id] = hit
+          else
+            topic_hit.comments << comment
+            topic_hit.score = comment.solr_score if topic_hit.score < comment.solr_score
+          end
+        end
       end
     end
     TopicHit.normalize_scores(@hits.values)
