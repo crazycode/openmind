@@ -15,14 +15,14 @@
       <%= @forum.active %>
     </p>
     <p>
-      <label>Mediators:</label>
+      <label>Moderators:</label>
       <% for user in @forum.mediators %><br />
         &bull;&nbsp;<%= h user_display_name(user) %><br />
       <% end %>
     </p>
     <p>
       <label>Blog Style Forum:</label>
-      <%= @forum.restrict_topic_creation %> (if true, only mediators can create new topics)
+      <%= @forum.restrict_topic_creation %> (if true, only moderators can create new topics)
     </p>
     <p>
       <label>Access:</label>

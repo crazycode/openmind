@@ -128,7 +128,7 @@ class CommentsController < ApplicationController
   def promote_power_user
     comment = TopicComment.find(params[:id])
     if !comment.topic.mediator? current_user
-      flash[:error] = "Only mediators can promote a power user"
+      flash[:error] = "Only moderators can promote a power user"
     elsif comment.topic.forum.power_user? comment.user
       flash[:error] = "User is already a power user for this forum"
     else
