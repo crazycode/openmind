@@ -26,7 +26,7 @@ class StringUtils
   end
 
   def self.strip_wildcards str
-    str.gsub(/[*?]*/,'') unless str.nil?
+    str.gsub(/[*?"'"]*/,'') unless str.nil?
   end
   
 #  def self.strip_html_tags html    
