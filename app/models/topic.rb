@@ -37,6 +37,13 @@ class Topic < ActiveRecord::Base
   validates_presence_of :title, :user
   validates_presence_of :comment_body, :on => :create
   validates_length_of   :title, :within => 5..200, :allow_blank => true
+
+
+  named_scope :by_forum,
+    lambda{|forum_id| {:conditions => ['forum_id = ?', forum_id]} }
+
+  named_scope :open, :conditions => ['open = 1']
+  named_scope :closed, :conditions => ['open = 2']
   
   attr_accessor :comment_body
   
@@ -114,6 +121,10 @@ class Topic < ActiveRecord::Base
   
   def watched? user
     watchers.include? user
+  end
+
+  def days_open
+    (Time.zone.now - created_at)/(60.0*60.0*24.0) unless created_at.nil?
   end
   
   def self.notify_watchers

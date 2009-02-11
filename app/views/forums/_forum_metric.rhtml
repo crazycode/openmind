@@ -1,0 +1,19 @@
+<% if forum_metric.can_see? current_user %>
+  <h3>
+    <%= link_to forum_metric.name, forum_path(forum_metric),
+      html_options = {:onmouseover => "Tip('View details for the #{forum_metric.name} forum')"} %>
+  </h3>
+  <table cellspacing="0" cellpadding="0" class="cssform">
+    <tr>
+      <th rowspan="2">Mediator</th>
+      <th colspan="3">Open Topics</th>
+    </tr>
+    <tr>
+      <th>Count</th>
+      <th>Average Days Open</th>
+      <th>Oldest Days Open</th>
+    </tr>
+    <%=render(:partial => "mediator_forum_metric", :collection => forum_metric.mediators, 
+      :locals => {:forum => forum_metric} )%>
+  </table>
+<% end %>

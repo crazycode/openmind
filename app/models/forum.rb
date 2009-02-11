@@ -33,7 +33,17 @@ class Forum < ActiveRecord::Base
   validates_length_of   :name, :maximum => 50
   validates_length_of   :description, :maximum => 150
   validates_numericality_of :display_order, :only_integer => true, :allow_nil => true
-  
+
+
+  named_scope :active,
+    :conditions => [ "active = ?", true]
+
+  named_scope :tracked,
+    :conditions => [ "tracked = ?", true]
+
+  named_scope :order_by_name,
+    :order => 'name asc'
+
   def can_delete?
     topics.empty?
   end

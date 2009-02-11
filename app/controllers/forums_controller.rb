@@ -1,7 +1,7 @@
 class ForumsController < ApplicationController
   before_filter :login_required, :except => [:index, :show, :rss, :search, :tag]
   access_control [:new, :destroy ] => 'sysadmin',
-    [:edit, :create, :update ] => 'sysadmin|mediator'
+    [:edit, :create, :update, :metrics ] => 'sysadmin|mediator'
   helper :topics
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
@@ -45,6 +45,10 @@ class ForumsController < ApplicationController
     #    @forums = Forum.list params[:page], (current_user == :false ? 10 : current_user.row_limit)
     @forums = Forum.list_by_forum_group.find_all{|forum| forum.can_see? current_user}
     @forum_groups = ForumGroup.list_all current_user
+  end
+
+  def metrics
+    @forums = Forum.active.tracked.order_by_name.find_all{|f| f.can_edit? current_user}
   end
 
   def create

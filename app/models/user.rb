@@ -122,6 +122,10 @@ class User < ActiveRecord::Base
   def prodmgr?
     roles.collect(&:title).include? 'prodmgr'
   end
+
+  def mediator?
+    roles.collect(&:title).include? 'mediator'
+  end
   
   def user_logons_90_days
     user_logons.find(:all, :conditions => ['created_at > ?', (Time.zone.now - 60*60*24*90).to_s(:db)])

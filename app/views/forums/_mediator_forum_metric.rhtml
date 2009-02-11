@@ -1,0 +1,19 @@
+<tr>
+  <td>
+    <%=  mediator_forum_metric.email%>
+  </td>
+    <% owned_open_topics = mediator_forum_metric.owned_topics.by_forum(forum.id).open.sort_by{|t| t.days_open * -1} %>
+  <td>
+    <%=  owned_open_topics.size %>
+  </td>
+  <td>
+    <%=  format("%.1f",
+      owned_open_topics.inject(0){|sum, item| sum + item.days_open}/owned_open_topics.size) if owned_open_topics.size > 0 %>
+    <%= '-' unless owned_open_topics.size > 0 %>
+  </td>
+  <td>
+    <%=  format("%.1f",
+      owned_open_topics.first.days_open) if owned_open_topics.size > 0 %>
+    <%= '-' unless owned_open_topics.size > 0 %>
+  </td>
+</tr>

@@ -13,6 +13,9 @@
     <%= link_to 'New Forum', new_forum_path,
       html_options = {:class => "button",
       :onmouseover => "Tip('Create a new forum')"} %>
+    <%= link_to 'Metrics', metrics_forums_path,
+      html_options = {:class => "button",
+      :onmouseover => "Tip('View management metrics')"} if current_user.mediator? and !Forum.active.tracked.empty? %>
   </div>
 <% end %>
 
