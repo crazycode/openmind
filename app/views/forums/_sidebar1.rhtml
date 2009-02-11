@@ -28,7 +28,7 @@
   <div class="sideBarItem">
     <div class="unorderListNavContainer">
       <ul class="navlist2">
-        <% for user in TopicComment.top_users %>
+        <% for user in TopicComment.top_users @forum %>
           <li>
             <%= user_display_name user %> (<%= pluralize user.topic_comments.size, "post"  %>)
           </li>
@@ -37,7 +37,7 @@
     </div>
   </div>
 
-  <% unless @forum.nil? %>
+  <% unless @forum.nil? or !@forum.public? %>
     <% tiptxt= "Subscribe to be notified of postings in this forum" %>
     <a href="<%= url_for(:action => 'rss', :id => @forum, :only_path => false) %>" onmouseover="Tip('<%= tiptxt %>')"><%= theme_image_tag("icons/14x14/feed-icon-14x14.png", :border=>0) %></a>
     <span style="font-size:0.75em;" onmouseover="Tip('<%= tiptxt %>')">Subscribe via RSS</span>

@@ -20,7 +20,7 @@
   <div class="sideBarItem">
     <div class="unorderListNavContainer">
       <ul class="navlist2">
-        <% for user in TopicComment.top_users %>
+        <% for user in TopicComment.top_users(@topic.forum) %>
           <li>
             <%= user_display_name user %> (<%= pluralize user.topic_comments.size, "post"  %>)
           </li>

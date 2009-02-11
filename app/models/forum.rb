@@ -92,11 +92,15 @@ class Forum < ActiveRecord::Base
   def mediator? user
     mediators.include? user
   end
+
+  def public?
+    self.groups.empty? and self.enterprise_types.empty?
+  end
   
   def can_see? user
     return true if user != :false and (user.prodmgr? or user.sysadmin?)
     can_edit? user or 
-      (((groups.empty? and enterprise_types.empty?) or 
+      (((public?) or
           !groups.select{|group| group.users.include? user}.empty? or
           !enterprise_types.select{|enterprise_type| enterprise_type.users.include? user}.empty?) and active)
   end

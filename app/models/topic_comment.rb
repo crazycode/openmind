@@ -57,17 +57,22 @@ class TopicComment < Comment
     !self.endorser.nil? and topic.forum.mediators.include? current_user
   end
   
-  def self.top_users
+  def self.top_users forum=nil
     sql = %Q{
         select u.id, u.first_name, u.last_name, u.email, u.hide_contact_info, count(*)
         from users as u
         inner join comments as c on u.id = c.user_id
+        inner join topics as t on t.id = c.topic_id
         where c.type = 'TopicComment'
+          and t.forum_id = ? or ? = -1
         group by u.id, u.first_name, u.last_name, u.email, u.hide_contact_info
         order by count(*) desc
         limit 5
     }
-    User.find(:all, :conditions => ["id in (?)", User.find_by_sql(sql).collect(&:id)]).sort_by{|u| u.topic_comments.size * -1}
+    forum_id = (forum.nil? ? -1 : forum.id)
+    puts "Forum ID===============> #{forum_id}"
+    User.find(:all, :conditions => ["id in (?)",
+        User.find_by_sql([sql, forum_id, forum_id]).collect(&:id)]).sort_by{|u| u.topic_comments.size * -1}
   end
   
   def rss_headline
