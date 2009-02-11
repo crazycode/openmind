@@ -51,6 +51,18 @@
 <%end%>  
 
 <h1>Topics</h1>
+<% if @forum.tracked and @forum.can_edit? current_user %>
+  <% form_tag(forum_path(@forum), :method => :get, :name => 'filter' ) do -%>
+    <%= hidden_field_tag 'form_based', 'yes' %>
+    <%= check_box_tag 'show_open', 'yes', session[:topics_show_open] == 'yes',
+      {:onmouseover => "Tip('Include open topics in the listing')",
+      :onchange => 'document.filter.submit();'} %>&nbsp;Show open topics&nbsp;&nbsp;&nbsp;
+    <%= check_box_tag 'show_closed', 'yes', session[:topics_show_closed] == 'yes',
+      {:onmouseover => "Tip('Include closed topics in the listing')",
+      :onchange => 'document.filter.submit();'} %>&nbsp;Show closed topics&nbsp;&nbsp;&nbsp;
+  <% end %>
+  <br/>
+<% end %>
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
     <th>Title</th>

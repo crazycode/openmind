@@ -20,10 +20,21 @@ class ForumsController < ApplicationController
   
   def show
     @forum = Forum.find(params[:id])
+    if params[:form_based] == "yes"
+      session[:topics_show_open] = (params[:show_open].nil? ? "no" : "yes")
+      session[:topics_show_closed] = params[:show_closed].nil? ? "no" : "yes"
+    else
+      session[:topics_show_open] ||= "yes"
+      session[:topics_show_closed] ||= "yes"
+      session[:topics_show_open] = params[:show_open] unless params[:show_open].nil?
+      session[:topics_show_closed] = params[:show_closed] unless params[:show_closed].nil?
+    end
     @topics = Topic.list(params[:page],
       current_user == :false ? 10 : current_user.row_limit, 
       @forum,
-      (@forum.mediators.include? current_user))
+      (@forum.mediators.include? current_user),
+      ((@forum.tracked and @forum.can_edit?(current_user)) ? session[:topics_show_open] == 'yes' : true),
+      ((@forum.tracked and @forum.can_edit?(current_user)) ? session[:topics_show_closed] == 'yes' : true))
     unless @forum.can_see? current_user or prodmgr?
       flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
       redirect_to redirect_path_on_access_denied(current_user)

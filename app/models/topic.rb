@@ -52,12 +52,14 @@ class Topic < ActiveRecord::Base
     comments.count <= 1
   end
   
-  def self.list(page, per_page, forum, mediator)
+  def self.list(page, per_page, forum, mediator, show_open, show_closed)
     paginate :page => page,
-      :conditions => ["forum_id = ? AND (? = 1 OR " +
+      :conditions => ["forum_id = ? " +
+        "AND ((open = 1 and ? = 1) OR (open = 0 and ? = 1))" +
+        "AND (? = 1 OR " +
         "EXISTS (SELECT NULL FROM comments AS c " +
         "WHERE c.topic_id = topics.id " +
-        "AND c.private != 1))", forum.id, mediator],
+        "AND c.private != 1))", forum.id, show_open, show_closed, mediator],
       :order => "pinned DESC, last_commented_at DESC",
       :per_page => per_page
   end
