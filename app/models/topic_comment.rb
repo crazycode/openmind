@@ -70,7 +70,6 @@ class TopicComment < Comment
         limit 5
     }
     forum_id = (forum.nil? ? -1 : forum.id)
-    puts "Forum ID===============> #{forum_id}"
     User.find(:all, :conditions => ["id in (?)",
         User.find_by_sql([sql, forum_id, forum_id]).collect(&:id)]).sort_by{|u| u.topic_comments.size * -1}
   end
