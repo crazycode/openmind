@@ -55,6 +55,9 @@
   <tr>
     <th>Title</th>
     <th>Started By</th>
+    <% if @forum.tracked and @forum.can_edit? current_user %>
+      <th>Owner</th>
+    <% end %>
     <th>Replies</th>
     <th>Views</th>
     <th>Watchers</th>
