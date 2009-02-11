@@ -15,6 +15,10 @@
       <%= @forum.active %>
     </p>
     <p>
+      <label>Tracking Enabled:</label>
+      <%= @forum.tracked %>
+    </p>
+    <p>
       <label>Moderators:</label>
       <% for user in @forum.mediators %><br />
         &bull;&nbsp;<%= h user_display_name(user) %><br />

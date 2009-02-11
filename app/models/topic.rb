@@ -16,6 +16,7 @@
 #
 
 class Topic < ActiveRecord::Base
+  before_update :set_close_date
   acts_as_taggable
   acts_as_solr :fields => [:title, {:created_at => :date}]
 
@@ -24,6 +25,7 @@ class Topic < ActiveRecord::Base
     :cache_column => :rating_average
   belongs_to :forum
   belongs_to :user
+  belongs_to :owner, :class_name => 'User', :foreign_key => :owner_id
   has_many :comments, :class_name => "TopicComment", :dependent => :destroy ,
     :order => "id ASC"   
   has_many :user_topic_reads, :dependent => :delete_all
@@ -38,12 +40,20 @@ class Topic < ActiveRecord::Base
   
   attr_accessor :comment_body
   
+  def set_close_date
+    if !open and closed_at.nil?
+      self.update_attribute(:closed_at, Time.zone.now)
+    elsif open and !closed_at.nil?
+      self.update_attribute(:closed_at, nil)
+    end
+  end
+
   def can_delete?
     comments.count <= 1
   end
   
   def self.list(page, per_page, forum, mediator)
-    paginate :page => page, 
+    paginate :page => page,
       :conditions => ["forum_id = ? AND (? = 1 OR " +
         "EXISTS (SELECT NULL FROM comments AS c " +
         "WHERE c.topic_id = topics.id " +
@@ -88,7 +98,7 @@ class Topic < ActiveRecord::Base
     TopicComment.find(:all,
       :select => "comments.*",
       :joins => [:topic],
-      :conditions => 
+      :conditions =>
         [
         "comments.topic_id = ? " +
           "and exists (" +
@@ -107,7 +117,7 @@ class Topic < ActiveRecord::Base
   def self.notify_watchers
     # puts "Checking for topic notifications at #{Time.zone.now.to_s}"
     # Find users who have a comment more recent than the last watch check
-    users = User.find(:all, :conditions => 
+    users = User.find(:all, :conditions =>
         ["EXISTS " +
           "(SELECT NULL FROM topic_watches AS tw " +
           "INNER JOIN topics AS t ON t.id = tw.topic_id " +

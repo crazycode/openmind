@@ -87,6 +87,7 @@ class User < ActiveRecord::Base
   has_many :topic_comments,:dependent => :destroy, :order => "id ASC"
   has_many :user_idea_reads,:dependent => :destroy
   has_many :rates
+  has_many :owned_topics, :class_name => 'Topic', :foreign_key => "owner_id"
   
   before_create :make_activation_code
 

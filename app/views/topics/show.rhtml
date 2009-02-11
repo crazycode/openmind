@@ -11,12 +11,23 @@
   <% if can_edit_topic? @topic %>
     <%= link_to 'Edit', edit_topic_path(@topic) , html_options = {:class=> "button",
       :onmouseover => "Tip('Edit topic')"}%>
+    <% if @topic.forum.tracked %>
+      <% if @topic.open %>
+        <%= link_to 'Mark as Closed', toggle_status_topic_path(@topic) , html_options = {:class=> "button",
+          :onmouseover => "Tip('Mark this topic as closed')",
+          :method => :put}%>
+      <% else %>
+        <%= link_to 'Mark as Open', toggle_status_topic_path(@topic) , html_options = {:class=> "button",
+          :onmouseover => "Tip('Mark this topic as open')",
+          :method => :put}%>
+      <% end %>
+    <% end %>
   <% end %>
 </div>
 
 <%content_for :sidebar1 do -%>
   <%=render(:partial => "sidebar1", :object => @topic)%>
-<%end%> 
+<%end%>
 
 <%= link_to "All Forums", forums_path , html_options = {
   :onmouseover => "Tip('Return to list forums')"}%>
@@ -34,7 +45,7 @@ Topic: <%= truncate @topic.title, 40 %>
   <b>Rate this topic: </b><%= ratings_for @topic %>
   <br/>
 <% end %>
-<%= link_to "Add Comment", 
+<%= link_to "Add Comment",
   new_comment_path(:id => @topic, :type => 'Topic'),
   html_options = {:class=> "button",
   :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>

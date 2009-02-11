@@ -29,6 +29,10 @@
       <%= form.check_box :active %>
     </p>
     <p>
+      <label>Tracking Enabled:</label>
+      <%= form.check_box :tracked %>
+    </p>
+    <p>
       <label>Moderators:</label>
       <% for user in @mediators %>
         <span style="display:block;margin-left:10px;">

@@ -5,16 +5,23 @@
 <%= error_messages_for 'topic' %>
 <% form_for(:topic, :url => topic_path(@topic), 
   :html => {:method => :put }) do |form| %>
-  <div id="actionButtons2">
-    <%= link_to 'List topics', forum_path(@topic.forum),
-      html_options = { :class => "button" } %>
-  </div>
   <div class="formTitle"><%=theme_image_tag("icons/16x16/forums.png", :alt=>"edit topic")%>Edit topic</div>
   <div class="cssform widerLabel">
     <p>
       <label for="topic_name">Title:</label>
       <%= form.text_field :title, { :size => 50, :maxlength => 200 } %>
     </p>
+    <% if @topic.forum.tracked %>
+      <p>
+        <label for="topic_open">Open:</label>
+        <%= form.check_box :open %>
+      </p>
+      <p>
+        <label for="topic_owner">Owner:</label>
+        <%=form.collection_select :owner_id, @topic.forum.mediators, :id,
+          :email, { :prompt => "Please select..." } %>
+      </p>
+    <% end %>
     <p>
       <label for="topic_pinned">Pinned:</label>
       <%= form.check_box :pinned %>

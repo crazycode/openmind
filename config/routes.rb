@@ -33,7 +33,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :releases, :member => { :commit => :post },
     :collection => { :preview => :get, :list => :get }
   map.resources :topics, :collection => { :preview => :get, :search => :get,
-    :tag => :get }, :member => {:rate => :post}
+    :tag => :get }, :member => {:rate => :post, :toggle_status => :put}
   map.resources :user_logons
   map.resources :user_requests, :member => { :approve => :post, :reject => :post,
     :acknowledge => :get, :next => :get, :previous => :get }

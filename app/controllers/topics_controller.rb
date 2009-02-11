@@ -4,7 +4,7 @@ class TopicsController < ApplicationController
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :rate ],
     :redirect_to => { :action => :index }
-  verify :method => :put, :only => [ :update ],
+  verify :method => :put, :only => [ :update, :toggle_status ],
     :redirect_to => { :action => :index }
   verify :method => :delete, :only => [ :destroy ],
     :redirect_to => { :action => :index }
@@ -149,6 +149,14 @@ class TopicsController < ApplicationController
       @hits = hits.values.find_all{ |hit| hit.topic.forum == @forum }
       TopicHit.normalize_scores(@hits)
     end
+  end
+
+  def toggle_status
+    @topic = Topic.find(params[:id])
+    @topic.open = !@topic.open
+    @topic.save!
+    flash[:notice] = "Topic has been marked as #{(@topic.open ? "open" : "closed")}"
+    redirect_to topic_path(@topic)
   end
   
   def toggle_topic_details_box

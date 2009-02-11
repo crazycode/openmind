@@ -161,7 +161,7 @@ module ApplicationHelper
   
   def user_display_name user
     full = prodmgr? or sysadmin? or allocmgr? unless current_user == :false
-    user.display_name full
+    user.display_name full unless user.nil?
   end
   
   # Required to support hard line breaks See
