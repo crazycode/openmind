@@ -60,6 +60,10 @@
     <%= check_box_tag 'show_closed', 'yes', session[:topics_show_closed] == 'yes',
       {:onmouseover => "Tip('Include closed topics in the listing')",
       :onchange => 'document.filter.submit();'} %>&nbsp;Show closed topics&nbsp;&nbsp;&nbsp;
+    <b>Filter by Owner:</b>
+        <%= select_tag :owner_filter,
+        options_for_select(mediator_owner_filter_list, session[:topics_owner_filter].to_i),
+        html_options = { :onchange => 'document.filter.submit();'} %>
   <% end %>
   <br/>
 <% end %>

@@ -40,10 +40,16 @@ class Topic < ActiveRecord::Base
 
 
   named_scope :by_forum,
-    lambda{|forum_id| {:conditions => ['forum_id = ?', forum_id]} }
+    lambda{|forum_id| {:conditions => ['forum_id = ? or ? is null', forum_id, forum_id]} }
+
+  named_scope :tracked, :joins => [:forum], :conditions => 'forums.tracked = 1'
+  named_scope :closed_after,
+    lambda{|closed_at| {:conditions => ['closed_at >= ?', closed_at]} }
 
   named_scope :open, :conditions => ['open = 1']
-  named_scope :closed, :conditions => ['open = 2']
+  named_scope :closed, :conditions => ['open != 1']
+  named_scope :owned, :conditions => ['owner_id is not null']
+  named_scope :unowned, :conditions => ['owner_id is null']
   
   attr_accessor :comment_body
   
@@ -59,14 +65,18 @@ class Topic < ActiveRecord::Base
     comments.count <= 1
   end
   
-  def self.list(page, per_page, forum, mediator, show_open, show_closed)
+  def self.list(page, per_page, forum, mediator, show_open, show_closed, owner_id)
     paginate :page => page,
       :conditions => ["forum_id = ? " +
         "AND ((open = 1 and ? = 1) OR (open = 0 and ? = 1))" +
+        "AND (? = -1 or (? = 0 and owner_id is null) or owner_id = ?)" +
         "AND (? = 1 OR " +
         "EXISTS (SELECT NULL FROM comments AS c " +
         "WHERE c.topic_id = topics.id " +
-        "AND c.private != 1))", forum.id, show_open, show_closed, mediator],
+        "AND c.private != 1))",
+      forum.id,
+      show_open, show_closed, owner_id, owner_id, owner_id,
+      mediator],
       :order => "pinned DESC, last_commented_at DESC",
       :per_page => per_page
   end

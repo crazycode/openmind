@@ -105,10 +105,14 @@ class User < ActiveRecord::Base
     :conditions => ['users.active = 1 and roles.title = ?', 'sysadmin'],
     :order => :email
 
-
   named_scope :voters,
     :joins => [:roles],
     :conditions => "roles.title = 'Voter'",
+    :order => 'users.email'
+
+  named_scope :mediators,
+    :joins => [:roles],
+    :conditions => "roles.title = 'Mediator'",
     :order => 'users.email'
 
   def self.row_limit_options
@@ -251,7 +255,7 @@ class User < ActiveRecord::Base
   end
   
   def display_name always_full=false
-    return "#{self.short_name}" if self.hide_contact_info and !always_full
+    return "#{self.short_name}" if (self.hide_contact_info and !always_full) or self.email.nil?
     "#{self.full_name} (#{self.email})"
   end
   

@@ -20,21 +20,30 @@ class ForumsController < ApplicationController
   
   def show
     @forum = Forum.find(params[:id])
-    if params[:form_based] == "yes"
-      session[:topics_show_open] = (params[:show_open].nil? ? "no" : "yes")
-      session[:topics_show_closed] = params[:show_closed].nil? ? "no" : "yes"
-    else
-      session[:topics_show_open] ||= "yes"
-      session[:topics_show_closed] ||= "yes"
-      session[:topics_show_open] = params[:show_open] unless params[:show_open].nil?
-      session[:topics_show_closed] = params[:show_closed] unless params[:show_closed].nil?
+    if @forum.tracked and @forum.can_edit?(current_user)
+      if params[:form_based] == "yes"
+        session[:topics_show_open] = (params[:show_open].nil? ? "no" : "yes")
+        session[:topics_show_closed] = params[:show_closed].nil? ? "no" : "yes"
+        session[:topics_owner_filter] = params[:owner_filter]
+      else
+        session[:topics_show_open] ||= "yes"
+        session[:topics_show_closed] ||= "yes"
+        session[:topics_owner_filter] ||= -1
+        session[:topics_show_open] = params[:show_open] unless params[:show_open].nil?
+        session[:topics_show_closed] = params[:show_closed] unless params[:show_closed].nil?
+        session[:topics_owner_filter] = params[:owner_filter] unless params[:owner_filter].nil?
+      end
+      if session[:topics_owner_filter].to_i > 0
+        session[:topics_owner_filter] = -1 unless @forum.mediators.collect(&:id).include? session[:topics_owner_filter].to_i
+      end
     end
     @topics = Topic.list(params[:page],
       current_user == :false ? 10 : current_user.row_limit, 
       @forum,
       (@forum.mediators.include? current_user),
       ((@forum.tracked and @forum.can_edit?(current_user)) ? session[:topics_show_open] == 'yes' : true),
-      ((@forum.tracked and @forum.can_edit?(current_user)) ? session[:topics_show_closed] == 'yes' : true))
+      ((@forum.tracked and @forum.can_edit?(current_user)) ? session[:topics_show_closed] == 'yes' : true),
+      ((@forum.tracked and @forum.can_edit?(current_user)) ? session[:topics_owner_filter].to_i : -1))
     unless @forum.can_see? current_user or prodmgr?
       flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
       redirect_to redirect_path_on_access_denied(current_user)
@@ -47,7 +56,17 @@ class ForumsController < ApplicationController
     @forum_groups = ForumGroup.list_all current_user
   end
 
+  def self.week_size
+    8
+  end
+
   def metrics
+    @weeks = []
+    @weeks[1] = Date.today - Date.today.cwday.days
+    @weeks[0] = @weeks[1] + 7.days
+    (2..ForumsController.week_size + 1).each do |i|
+      @weeks[i] = @weeks[i - 1] - 7.days
+    end
     @forums = Forum.active.tracked.order_by_name.find_all{|f| f.can_edit? current_user}
   end
 

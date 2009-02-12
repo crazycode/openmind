@@ -21,7 +21,30 @@ module ForumsHelper
     author = boldify(author) if last_comment.topic.unread_comment?(current_user)
     "#{subject}<br/>#{author} wrote \"#{truncate StringUtils.strip_html(comment), 40}\"<br/>#{om_date_time last_comment.created_at}"
   end
-  
+
+  def dummy_all_forum
+    forum = Forum.new(:name => "All")
+    forum.mediators = User.mediators
+    forum
+  end
+
+  def dummy_unassigned_mediator
+    user = User.new(:last_name => "Unowned")
+    user
+  end
+
+  def mediator_owner_filter_list
+    names = []
+    names << ["All", -1]
+    names << ["Unowned", 0]
+    for user in @forum.mediators
+      name = user_display_name(user)
+      name = "#{user_display_name(user)} (inactive)" if !user.active
+      names << [name, user.id]
+    end
+    names.sort!{|x,y| x[0].upcase <=> y[0].upcase }
+    names
+  end
     
   def last_topic_post topic
     return if topic.last_comment.nil?
