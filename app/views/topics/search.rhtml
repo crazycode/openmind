@@ -36,7 +36,7 @@
 
 <%= "No matches" if @hits.empty? %>
 
-<%  if @forum.can_create_topic? current_user %>
+<%  unless @forum.restrict_topic_creation %>
   <br/><br/>
   <b>Didn't find what you were looking for? Consider asking your question by creating a new topic:</b>
   <%= link_to 'Create New Topic', new_topic_path(:forum_id => @forum.id),
