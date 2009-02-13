@@ -53,6 +53,7 @@ ActionController::Routing::Routes.draw do |map|
   map.home '', :controller => 'ideas', :action => 'index'
   
   # Install the default route as the lowest priority.
+  map.connect 'download/:id', :controller => 'attachments', :action => 'download'
   map.connect ':controller/:action/:id.:format'
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action.:format'

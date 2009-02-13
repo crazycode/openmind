@@ -54,7 +54,8 @@ class AttachmentsController < ApplicationController
   end
 
   def download
-    @attachment = Attachment.find(params[:id])
+    @attachment = Attachment.find_by_alias(params[:id])
+    @attachment = Attachment.find(params[:id]) if @attachment.nil?
     if !@attachment.public and current_user == :false
       flash[:error] = 'You must log on to see the attachment'
       redirect_to :controller => 'account', :action => 'login'

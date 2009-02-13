@@ -13,6 +13,9 @@ class Attachment < ActiveRecord::Base
   
   validates_presence_of :filename, :description, :content_type, :size
   validates_length_of :filename, :maximum => 200
+  validates_length_of :alias, :maximum => 40, :allow_nil => true
+  validates_uniqueness_of :alias, :case_sensitive => false, 
+    :allow_nil => true, :allow_blank => true
   belongs_to :user
   has_one :thumbnail, :class_name => 'Attachment', 
     :foreign_key => :parent_attachment_id, :dependent => :delete

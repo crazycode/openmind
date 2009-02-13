@@ -19,6 +19,10 @@
       <%= form.text_field :description, { :size => 50, :maxlength => 200 } %>
     </p>
     <p>
+      <label for="attachment_alias">Alias:</label>
+      <%= form.text_field :alias, { :size => 40, :maxlength => 40 } %>
+    </p>
+    <p>
       <label for="attachment_public">Public:</label>
       <td class="center"><%= form.check_box :public,
           {:onmouseover => "Tip('Public attachments can be viewed even if a user is not logged in')"},
