@@ -29,14 +29,14 @@ module ForumsHelper
   end
 
   def dummy_unassigned_mediator
-    user = User.new(:last_name => "Unowned")
+    user = User.new(:last_name => "Un-owned")
     user
   end
 
   def mediator_owner_filter_list
     names = []
     names << ["All", -1]
-    names << ["Unowned", 0]
+    names << ["Un-owned", 0]
     for user in @forum.mediators
       name = user_display_name(user)
       name = "#{user_display_name(user)} (inactive)" if !user.active
