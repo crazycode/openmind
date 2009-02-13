@@ -1,5 +1,5 @@
 <tr>
-  <td><%= h attachment.filename %></td>
+  <td><%= h truncate(attachment.filename, 50) %></td>
   <td>
     <%= h attachment.description %>
     <% unless attachment.thumbnail.nil? %>
