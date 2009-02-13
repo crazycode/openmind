@@ -21,7 +21,7 @@
     </p>
     <p>
       <label>Members:</label>
-      <% for user in @group.users %>
+      <% for user in User.active %>
         <span style="display:block;margin-left:10px;">
           <%= check_box_tag "group[user_ids][]", user.id, @group.users.include?(user) %>
           <%= user_display_name user %>
