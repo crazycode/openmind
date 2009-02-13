@@ -27,7 +27,7 @@
       <label for="attachment_public">Public:</label>
       <td class="center"><%= form.check_box :public,
           {:onmouseover => "Tip('Public attachments can be viewed even if a user is not logged in')",
-          :onchange => "toggleETypes();"},
+          :onclick => "toggleETypes();"},
           "true", "false" %></td>
     </p>
     <div id="etypes" style="display:<%= @attachment.public ? 'none' : 'block'%>;">
