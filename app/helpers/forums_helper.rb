@@ -23,7 +23,7 @@ module ForumsHelper
   end
 
   def dummy_all_forum
-    forum = Forum.new(:name => "All")
+    forum = Forum.new(:name => "All Forums")
     forum.mediators = User.mediators
     forum
   end
