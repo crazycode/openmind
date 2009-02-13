@@ -1,6 +1,7 @@
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'attachment_description' -%>
 <%end%>
+
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= error_messages_for 'attachment' %>
 <% form_for :attachment, :url => attachment_path(@attachment), 
@@ -25,9 +26,21 @@
     <p>
       <label for="attachment_public">Public:</label>
       <td class="center"><%= form.check_box :public,
-          {:onmouseover => "Tip('Public attachments can be viewed even if a user is not logged in')"},
+          {:onmouseover => "Tip('Public attachments can be viewed even if a user is not logged in')",
+          :onchange => "toggleETypes();"},
           "true", "false" %></td>
     </p>
+    <div id="etypes" style="display:<%= @attachment.public ? 'none' : 'block'%>;">
+      <p>
+        <label>Restrict to Enterprise Types:</label>
+        <% for etype in EnterpriseType.by_sort_value %>
+          <span style="display:block;margin-left:10px;">
+            <%= check_box_tag "attachment[enterprise_type_ids][]", etype.id, @attachment.enterprise_types.include?(etype) %>
+            <%= h etype.short_name %>: <%= h etype.description %>
+          </span>
+        <% end %>
+      </p>
+    </div>
     <%= render(:partial => "details") %>
     <p>
       <label></label>
@@ -38,3 +51,16 @@
     </p>
   </div>
 <% end %>
+
+<script type="text/javascript" language="JavaScript">
+  <!--
+  function toggleETypes() {
+    if(document.getElementById("attachment_public").checked) {
+      document.getElementById("etypes").style.display = "none";
+    }
+    else {
+      document.getElementById("etypes").style.display = "block";
+    }
+  }
+  //-->
+</script>

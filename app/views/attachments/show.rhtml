@@ -20,8 +20,17 @@
       <%= @attachment.alias %>
     </p>
     <p>
-      <label>Public:</label>
-      <%= @attachment.public %>
+      <label>Access:</label>
+      <% if @attachment.public %>
+        Public viewable
+      <% elsif @attachment.enterprise_types.empty? %>
+        Must be logged in
+      <% else  %>
+        Restricted to the following Enterprise Types:
+        <% for etype in @attachment.enterprise_types %><br />
+          &bull;&nbsp;<%= h etype.short_name %><br />
+        <% end %>
+      <% end %>
     </p>
     <p>
       <label>Hits:</label>

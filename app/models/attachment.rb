@@ -22,6 +22,7 @@ class Attachment < ActiveRecord::Base
   # the attachment record for which this record is a thumbnail. If null, then
   # this image is not a thumbnail
   belongs_to :parent, :class_name => 'Attachment', :foreign_key => :parent_attachment_id
+  has_and_belongs_to_many :enterprise_types
 
   def file=(incoming_file)
     self.filename = incoming_file.original_filename
@@ -32,6 +33,13 @@ class Attachment < ActiveRecord::Base
 
   def filename=(new_filename)
     write_attribute("filename", sanitize_filename(new_filename))
+  end
+
+  def can_see? user
+    return true if self.public
+    return false if user == :false or user.nil?
+    return true if user.mediator?
+    self.enterprise_types.empty? or self.enterprise_types.include? user.enterprise.enterprise_type
   end
 
   def can_delete? user

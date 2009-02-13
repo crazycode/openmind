@@ -26,10 +26,12 @@ class AttachmentsController < ApplicationController
   end
 
   def update
+    params[:attachment][:enterprise_type_ids] ||= []
     @attachment = Attachment.find(params[:id])
     if @attachment.update_attributes(params[:attachment])
       unless from_comment? params
         @attachment.public = (params[:attachment][:public] == "true")
+        @attachment.enterprise_types.clear if @attachment.public and !@attachment.enterprise_types.empty?
       end
       flash[:notice] = "Attachment '#{@attachment.filename}' was successfully updated."
       redirect_to attachment_path(@attachment)
@@ -56,9 +58,12 @@ class AttachmentsController < ApplicationController
   def download
     @attachment = Attachment.find_by_alias(params[:id])
     @attachment = Attachment.find(params[:id]) if @attachment.nil?
-    if !@attachment.public and current_user == :false
-      flash[:error] = 'You must log on to see the attachment'
+    if !@attachment.public and !logged_in?
+      flash[:error] = 'You must log on to see this file'
       redirect_to :controller => 'account', :action => 'login'
+    elsif !@attachment.can_see? current_user
+      flash[:error] = 'You do not have permission to access this file'
+      redirect_to :controller => 'ideas'
     else
       @attachment.downloads += 1
       @attachment.save!
