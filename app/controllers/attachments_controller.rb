@@ -59,6 +59,8 @@ class AttachmentsController < ApplicationController
       flash[:error] = 'You must log on to see the attachment'
       redirect_to :controller => 'account', :action => 'login'
     else
+      @attachment.downloads += 1
+      @attachment.save!
       send_data @attachment.data, :filename => @attachment.filename
     end
   end
