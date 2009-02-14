@@ -26,9 +26,12 @@
     <p>
       <label for="attachment_public">Public:</label>
       <td class="center"><%= form.check_box :public,
-          {:onmouseover => "Tip('Public attachments can be viewed even if a user is not logged in')",
-          :onclick => "toggleETypes();"},
+          {:onmouseover => "Tip('Public attachments can be viewed even if a user is not logged in')"},
           "true", "false" %></td>
+      <%= observe_field(:attachment_public,
+                        :url => { :action => :toggle_etypes },
+                        :with => "'selected=' + document.getElementById('attachment_public').checked") %>
+
     </p>
     <div id="etypes" style="display:<%= @attachment.public ? 'none' : 'block'%>;">
       <p>

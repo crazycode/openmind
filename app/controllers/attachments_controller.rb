@@ -39,6 +39,14 @@ class AttachmentsController < ApplicationController
       render :action => :edit
     end
   end
+
+  def toggle_etypes
+    respond_to do |format|
+      format.html {
+      }
+      format.js  { do_rjs_toggle_etypes(params['selected'] == 'true')}
+    end
+  end
   
   #  def new
   # # 	@attachment = Attachment.new # end
@@ -89,13 +97,13 @@ class AttachmentsController < ApplicationController
     end
     @attachment.user = current_user
 
-    if from_comment? params 
+    if from_comment? params
       unless @attachment.image?
         redirect_on_error params, "Uploads are restricted to image files only"
         return
       end
       if @attachment.size > APP_CONFIG['max_file_upload_size'].to_i * 1024
-        redirect_on_error params, 
+        redirect_on_error params,
           "Upload exceeds maximum file size of #{number_to_human_size(APP_CONFIG['max_file_upload_size'].to_i * 1024)}"
         return
       end
@@ -132,7 +140,7 @@ class AttachmentsController < ApplicationController
     if comment.class.to_s == 'TopicComment'
       topic_path(comment.topic.id, :anchor => comment.id.to_s)
     else
-      url_for(:controller => 'ideas', :action => 'show', :id => comment.idea, 
+      url_for(:controller => 'ideas', :action => 'show', :id => comment.idea,
         :selected_tab => "COMMENTS", :anchor => comment.id.to_s)
     end
   end
@@ -143,5 +151,15 @@ class AttachmentsController < ApplicationController
   
   def not_from_comment? params
     params[:comment_id].nil? or params[:comment_id].blank?
+  end
+
+  def do_rjs_toggle_etypes show_etypes
+    render :update do |page|
+      if show_etypes
+        page.visual_effect :blind_up, :etypes, :duration => 0.5
+      else
+        page.visual_effect :blind_down, :etypes, :duration => 1
+      end
+    end
   end
 end
