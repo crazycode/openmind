@@ -1,0 +1,7 @@
+<p>
+  <label></label>
+  <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait...",
+    :onmouseover => "Tip('Save changes to attachment')"} %>
+  <%= link_to 'Cancel', attachment_path(buttons), html_options = {:class=> "button",
+    :onmouseover => "Tip('Do not save changes to attachment')"} %>
+</p>

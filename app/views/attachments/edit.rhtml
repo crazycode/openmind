@@ -23,14 +23,15 @@
       <label for="attachment_alias">Alias:</label>
       <%= form.text_field :alias, { :size => 40, :maxlength => 40 } %>
     </p>
+    <%= render(:partial => "details", :object => @attachment) %>
     <p>
       <label for="attachment_public">Public:</label>
       <td class="center"><%= form.check_box :public,
           {:onmouseover => "Tip('Public attachments can be viewed even if a user is not logged in')"},
           "true", "false" %></td>
-      <%= observe_field(:attachment_public,
-                        :url => { :action => :toggle_etypes },
-                        :with => "'selected=' + document.getElementById('attachment_public').checked") %>
+        <%= observe_field(:attachment_public,
+          :url => { :action => :toggle_etypes, :id => @attachment },
+          :with => "'selected=' + document.getElementById('attachment_public').checked") %>
 
     </p>
     <div id="etypes" style="display:<%= @attachment.public ? 'none' : 'block'%>;">
@@ -44,14 +45,9 @@
         <% end %>
       </p>
     </div>
-    <%= render(:partial => "details") %>
-    <p>
-      <label></label>
-      <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait...",
-        :onmouseover => "Tip('Save changes to attachment')"} %>
-      <%= link_to 'Cancel', attachment_path(@attachment), html_options = {:class=> "button",
-        :onmouseover => "Tip('Do not save changes to attachment')"} %>
-    </p>
+    <div id="buttons">
+      <%= render(:partial => "buttons", :object => @attachment) %>
+    </div>
   </div>
 <% end %>
 

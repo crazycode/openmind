@@ -31,7 +31,9 @@ class AttachmentsController < ApplicationController
     if @attachment.update_attributes(params[:attachment])
       unless from_comment? params
         @attachment.public = (params[:attachment][:public] == "true")
+        @attachment.alias = nil if @attachment.alias.blank?
         @attachment.enterprise_types.clear if @attachment.public and !@attachment.enterprise_types.empty?
+        @attachment.save!
       end
       flash[:notice] = "Attachment '#{@attachment.filename}' was successfully updated."
       redirect_to attachment_path(@attachment)
@@ -110,6 +112,7 @@ class AttachmentsController < ApplicationController
     else
       @attachment.public = (params[:attachment][:public] == "true")
     end
+    @attachment.alias = nil if @attachment.alias.blank?
     Attachment.transaction do
       if @attachment.save
         flash[:notice] = "Your file has been uploaded successfully"
@@ -154,11 +157,16 @@ class AttachmentsController < ApplicationController
   end
 
   def do_rjs_toggle_etypes show_etypes
+    attachment = Attachment.find(params[:id])
     render :update do |page|
+      page.replace_html "buttons",  :partial => "buttons", :object => attachment
+      #      page.replace "details",  :partial => "details", :object => attachment
       if show_etypes
-        page.visual_effect :blind_up, :etypes, :duration => 0.5
+        page.hide 'etypes'
+        #        page.visual_effect :blind_up, :etypes, :duration => 0.5
       else
-        page.visual_effect :blind_down, :etypes, :duration => 1
+        page.show 'etypes'
+        #        page.visual_effect :blind_down, :etypes, :duration => 1
       end
     end
   end
