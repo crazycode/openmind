@@ -6,10 +6,6 @@
 <%= error_messages_for 'forum' %>
 <% form_for(:forum, :url => forum_path(@forum), 
   :html => {:method => :put }) do |form| %>
-  <div id="actionButtons2">
-    <%= link_to 'List forums', forums_path, 
-      html_options = { :class => "button" } %>
-  </div>
   <div class="formTitle"><%=theme_image_tag("icons/16x16/forums.png", :alt=>"edit forum")%>Edit forum</div>
   <div class="cssform widerLabel">
     <p>
