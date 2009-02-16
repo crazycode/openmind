@@ -38,8 +38,8 @@
       <% end %>
     </p>
     <p>
-      <label for="active">Blog Style Forum:</label>      
-      <%= form.check_box :restrict_topic_creation %>
+      <label for="active">Type:</label>
+      <%= form.select :forum_type, @types %>
     </p>
     <p>
       <label>Restrict to User Groups:</label>

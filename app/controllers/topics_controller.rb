@@ -20,13 +20,24 @@ class TopicsController < ApplicationController
       flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
       redirect_to redirect_path_on_access_denied(current_user)
     end
+
+    if @forum.restrict_topic_creation and !@forum.mediator? current_user
+      flash[:error] = 'You are not able to create new topics in this forum'
+      redirect_to forum_path(@forum)
+    end
     
     @topic ||= Topic.new(:forum => @forum)
     @comment ||= TopicComment.new(:topic => @topic)
   end
 
   def create    
-    forum_id = params[:forum_id]      
+    forum_id = params[:forum_id]
+    forum = Forum.find(forum_id)
+    if forum.restrict_topic_creation and !forum.mediator? current_user
+      flash[:error] = 'You are not able to create new topics in this forum'
+      redirect_to forum_path(forum)
+      return
+    end
     @topic = Topic.new(params[:topic])
     @topic.forum_id = forum_id
     @topic.user = current_user
@@ -114,7 +125,7 @@ class TopicsController < ApplicationController
     @hits = []
     session[:forums_search] = params[:search]
     # solr barfs if search string starts with a wild card...so strip it out
-    params[:search] = params[:search].gsub(/^[\s\*?]*/, "") unless params[:search].nil?
+    params[:search] = StringUtils.sanitize_search_terms params[:search]
     begin
       search_results = Topic.find_by_solr(params[:search], :scores => true)
     rescue RuntimeError => e

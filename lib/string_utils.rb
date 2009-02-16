@@ -28,6 +28,14 @@ class StringUtils
   def self.strip_wildcards str
     str.gsub(/[*?"'"]*/,'') unless str.nil?
   end
+
+  def self.init_cap str
+    str.gsub(/\b\w/){$&.upcase}
+  end
+
+  def self.sanitize_search_terms search
+    search.gsub(/^[\s\*?]*/, "").downcase unless search.nil?
+  end
   
 #  def self.strip_html_tags html    
 #    #remove <script ...>...</script> tags

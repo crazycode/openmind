@@ -38,6 +38,10 @@ class CommentsController < ApplicationController
         flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
         redirect_to redirect_path_on_access_denied(current_user)
       end
+      unless @topic.can_add_comment? current_user
+        flash[:error] = "You cannot add a comment to this topic"
+        redirect_to topic_path(@topic)
+      end
     end
   end
   
@@ -170,6 +174,11 @@ class CommentsController < ApplicationController
 
   def create_topic_comment
     @topic = Topic.find(params[:id])
+      unless @topic.can_add_comment? current_user
+        flash[:error] = "You cannot add a comment to this topic"
+        redirect_to topic_path(@topic)
+        return
+      end
     # touch counter exists to force an update on the topic so that updated_at
     # column is updated, so that topics are sorted properly
     @topic.touch_counter = @topic.touch_counter + 1

@@ -22,5 +22,5 @@
     :alt=>"add comment", :title=> "add comment"), 
     new_comment_path(:id => topic_action, :type => 'Topic'), 
     html_options = {
-    :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
+    :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } if topic_action.can_add_comment? current_user %>
 </div>

@@ -14,6 +14,7 @@ class ForumsController < ApplicationController
 
 
   def new
+    set_types
     @forum = Forum.new
     @mediators = Role.find_users_by_role('mediator')
   end
@@ -85,6 +86,7 @@ class ForumsController < ApplicationController
   end
 
   def edit
+    set_types
     @forum = Forum.find(params[:id])
     @mediators = Role.find_users_by_role('mediator')
     unless @forum.can_edit? current_user
@@ -121,7 +123,7 @@ class ForumsController < ApplicationController
     @hits = {}
     session[:forums_search] = params[:search]
     # solr barfs if search string starts with a wild card...so strip it out
-    params[:search] = params[:search].gsub(/^[\s\*?]*/, "") unless params[:search].nil?
+    params[:search] = StringUtils.sanitize_search_terms params[:search]
     
     begin
       search_results = Topic.find_by_solr(params[:search], :scores => true)
@@ -235,5 +237,13 @@ class ForumsController < ApplicationController
         page.visual_effect :blind_down, :forum_details, :duration => 1
       end
     end
+  end
+
+  def set_types
+    @types = [
+      ["Forum (Any user can create new topics and add comments to existing topics)",  "forum"],
+      ["Blog (Only moderators can create new topics, all users can add comments to existing topics)",  "blog"],
+      ["Announcement (Only moderators can create new topics and add comments to existing topics)",  "announcement"]
+    ]
   end
 end

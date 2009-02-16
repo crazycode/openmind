@@ -18,7 +18,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :comments, :collection => { :preview => :get },
     :member => { :endorse => :post, :unendorse => :post, :attach => :get,
     :privatize => :post, :publicize => :post, :promote_power_user => :post }
-  map.resources :enterprises, :member => { :next => :get, :previous => :get }
+  map.resources :enterprises, :member => { :next => :get, :previous => :get },
+    :collection => { :search => :get }
   map.resources :forums, :collection => { :search => :get, 
     :rss => :get, :tag => :get, :metrics => :get }, :member => { :mark_all_as_read => :post }
   map.resources :groups

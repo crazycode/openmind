@@ -112,6 +112,10 @@ class Topic < ActiveRecord::Base
   def mediator? user
     forum.mediator? user
   end
+
+  def can_add_comment? user
+    !forum.restrict_comment_creation or mediator? user
+  end
   
   def unread_comments user
     TopicComment.find(:all,

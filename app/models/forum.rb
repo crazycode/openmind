@@ -116,6 +116,21 @@ class Forum < ActiveRecord::Base
   end
   
   def can_create_topic? user
-    user != :false and (!self.restrict_topic_creation or can_edit? user)
+    user != :false and (!restrict_topic_creation or can_edit? user)
+  end
+
+  def restrict_topic_creation
+    self.forum_type == 'blog' or self.forum_type == 'announcement'
+  end
+
+  def restrict_comment_creation
+    self.forum_type == 'announcement'
+  end
+
+  protected
+  def validate
+    errors.add(:forum_type, 
+      "should be either 'forum', 'blog' or 'announcement'") unless self.forum_type == 'forum' or
+      self.forum_type == 'blog' or self.forum_type == 'announcement'
   end
 end

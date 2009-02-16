@@ -33,6 +33,7 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   acts_as_ordered :order => 'email'
   ajaxful_rater
+  acts_as_solr :fields => [:email, :first_name, :last_name]
 
   
   # Virtual attribute for the unencrypted password
@@ -212,12 +213,20 @@ class User < ActiveRecord::Base
     available_user_votes + available_enterprise_votes
   end
     
-  def self.list(page, per_page, start_filter, end_filter)
-    paginate :page => page, :order => 'email', 
+  def self.list(page, per_page, start_filter, end_filter, ids)
+    conditions = []
+    unless start_filter == 'All'
+      conditions << "email >= ? and email <= ?"
+      conditions << start_filter
+      conditions << end_filter
+    end
+    unless ids.nil?
+      conditions << "id in (?)"
+      conditions << ids
+    end
+    paginate :page => page, :order => 'email',
       :per_page => per_page, :include => 'enterprise',
-      :conditions => ["(email >= ? and email <= ?) or ? = 'All'",
-      start_filter, end_filter, start_filter
-    ]
+      :conditions => conditions
   end
   
   def full_name
@@ -302,7 +311,7 @@ class User < ActiveRecord::Base
     if self.activation_code == 'SKIP'
       self.activation_code = nil
     else
-      self.activation_code = Digest::SHA1.hexdigest( Time.zone.now.to_s.split(//).sort_by {rand}.join ) 
+      self.activation_code = Digest::SHA1.hexdigest( Time.zone.now.to_s.split(//).sort_by {rand}.join )
     end
   end
 end

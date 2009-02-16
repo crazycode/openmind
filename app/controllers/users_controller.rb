@@ -1,36 +1,50 @@
 class UsersController < ApplicationController
   before_filter :login_required, :except => [:lost_password]
   access_control [:new, :edit, :create, :update, :destroy, :reset_password] => 'sysadmin',
-    [:index, :list, :show, :next, :previous, :export, :export_import, :import, :process_imported] => '(sysadmin | allocmgr)'
+    [:index, :list, :show, :search, :next, :previous, :export, :export_import,
+    :import, :process_imported] => '(sysadmin | allocmgr)'
   
-  def index
-    list
-    render :action => 'list'
-  end
-
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [ :destroy, :create, :update, :update_profile, :reset_password, :process_imported, :import ],
     :redirect_to => { :action => :list }
 
+  def index
+    list
+    render :action => 'list'
+  end
+  
   def list
     session[:users_start_filter] = params[:start_filter] unless params[:start_filter].nil?
     session[:users_end_filter] = params[:end_filter] unless params[:end_filter].nil?
     session[:users_start_filter] = "All" if session[:users_start_filter].nil?
     session[:users_end_filter] = "All" if session[:users_end_filter].nil?
-    count = User.count
-    if count > 100
-      @tag1_begin = User.find(:first, :select => "email", :order => "email").email
-      @tag1_end = User.find(:first, :select => "email", :offset => count/5, :order => "email").email
-      @tag2_begin = User.find(:first, :select => "email", :offset => count/5 + 1, :order => "email").email
-      @tag2_end = User.find(:first, :select => "email", :offset => 2*count/5, :order => "email").email
-      @tag3_begin = User.find(:first, :select => "email", :offset => 2*count/5 + 1, :order => "email").email
-      @tag3_end = User.find(:first, :select => "email", :offset => 3*count/5, :order => "email").email
-      @tag4_begin = User.find(:first, :select => "email", :offset => 3*count/5 + 1, :order => "email").email
-      @tag4_end = User.find(:first, :select => "email", :offset => 4*count/5, :order => "email").email
-      @tag5_begin = User.find(:first, :select => "email", :offset => 4*count/5 + 1, :order => "email").email
-      @tag5_end = User.find(:first, :select => "email", :offset => count-1, :order => "email").email
+    unless session[:users_start_filter].nil?
+      session[:users_search] = nil
     end
-    @users = User.list params[:page], current_user.row_limit, session[:users_start_filter], session[:users_end_filter]
+    set_start_stop_tags
+    @users = User.list params[:page], current_user.row_limit, session[:users_start_filter], 
+      session[:users_end_filter], nil
+  end
+  
+  def search
+    session[:users_start_filter] = "All" 
+    session[:users_end_filter] = "All"
+    session[:users_search] = params[:search]
+    params[:search] = StringUtils.sanitize_search_terms params[:search]
+    set_start_stop_tags
+    begin
+      search_results = User.find_by_solr(params[:search]).docs.collect(&:id)
+    rescue RuntimeError => e
+      flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
+      logger.error(e)
+      redirect_to :action => 'list'
+    else
+      @users = User.list params[:page], 999,
+        session[:users_start_filter],
+        session[:users_end_filter],
+        search_results
+      render :action => 'list'
+    end
   end
 
   def show
@@ -367,5 +381,21 @@ class UsersController < ApplicationController
   def add_trailing_slash str
     str = str + '/' unless str.blank? or str =~ /\/$/
     str
+  end
+
+  def set_start_stop_tags
+    count = User.count
+    if count > 100
+      @tag1_begin = User.find(:first, :select => "email", :order => "email").email
+      @tag1_end = User.find(:first, :select => "email", :offset => count/5, :order => "email").email
+      @tag2_begin = User.find(:first, :select => "email", :offset => count/5 + 1, :order => "email").email
+      @tag2_end = User.find(:first, :select => "email", :offset => 2*count/5, :order => "email").email
+      @tag3_begin = User.find(:first, :select => "email", :offset => 2*count/5 + 1, :order => "email").email
+      @tag3_end = User.find(:first, :select => "email", :offset => 3*count/5, :order => "email").email
+      @tag4_begin = User.find(:first, :select => "email", :offset => 3*count/5 + 1, :order => "email").email
+      @tag4_end = User.find(:first, :select => "email", :offset => 4*count/5, :order => "email").email
+      @tag5_begin = User.find(:first, :select => "email", :offset => 4*count/5 + 1, :order => "email").email
+      @tag5_end = User.find(:first, :select => "email", :offset => count-1, :order => "email").email
+    end
   end
 end

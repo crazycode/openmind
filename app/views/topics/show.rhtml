@@ -6,7 +6,7 @@
   <%= link_to "Add Comment",
     new_comment_path(:id => @topic, :type => 'Topic'),
     html_options = {:class=> "button",
-    :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
+    :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } if @topic.can_add_comment? current_user %>
   <%= show_topic_watch_button @topic %>
   <% if can_edit_topic? @topic %>
     <%= link_to 'Edit', edit_topic_path(@topic) , html_options = {:class=> "button",
@@ -48,6 +48,6 @@ Topic: <%= truncate @topic.title, 40 %>
 <%= link_to "Add Comment",
   new_comment_path(:id => @topic, :type => 'Topic'),
   html_options = {:class=> "button",
-  :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
+  :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } if @topic.can_add_comment? current_user %>
 <%= link_to 'Back to Topics', forum_path(@topic.forum.id) , html_options = {:class=> "button",
   :onmouseover => "Tip('Return to list of topics for the #{@topic.forum.name} forum')"}%>

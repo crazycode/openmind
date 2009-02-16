@@ -21,6 +21,7 @@
 class Idea < ActiveRecord::Base
   acts_as_ordered :order => 'id' 
   acts_as_taggable
+  acts_as_solr :fields => [:title, :description], :include => [:comments]
   
   belongs_to :user
   belongs_to :release
@@ -153,9 +154,21 @@ class Idea < ActiveRecord::Base
     
     title_filter = properties[:title_filter]
     # title filter
-    condition_params = add_criteria(condition_params, 
-      "title like ?", 
-      "%#{title_filter}%") unless title_filter.nil? or title_filter.length == 0
+    unless title_filter.nil? or title_filter.blank?
+      search_results = []
+      begin
+        search_results = Idea.find_by_solr(StringUtils.sanitize_search_terms(title_filter)).docs.collect(&:id)
+      rescue RuntimeError => e
+        logger.error(e)
+      end
+      condition_params = add_criteria(condition_params,
+        "ideas.id in (?)",
+        search_results,
+        true)
+    end
+    #    condition_params = add_criteria(condition_params,
+    #      "title like ?",
+    #      "%#{title_filter}%") unless title_filter.nil? or title_filter.length == 0
     
     # tag filter
     condition_params = add_criteria(condition_params,

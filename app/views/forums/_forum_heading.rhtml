@@ -25,8 +25,15 @@
       <% end %>
     </p>
     <p>
-      <label>Blog Style Forum:</label>
-      <%= @forum.restrict_topic_creation %> (if true, only moderators can create new topics)
+      <label>Type:</label>
+      <%= StringUtils.init_cap @forum.forum_type %>
+      <% if @forum.forum_type == 'forum' %>
+        (Any user can create new topics and add comments to existing topics)
+      <% elsif @forum.forum_type == 'forum' %>
+        (Only moderators can create new topics, all users can add comments to existing topics)
+      <% else %>
+        (Only moderators can create new topics and add comments to existing topics)
+      <% end %>
     </p>
     <p>
       <label>Access:</label>

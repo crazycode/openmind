@@ -13,7 +13,8 @@
 #
 
 class Enterprise < ActiveRecord::Base
-  acts_as_ordered :order => 'name' 
+  acts_as_ordered :order => 'name'
+  acts_as_solr :fields => [:name]
   
   validates_presence_of :name, :active
   validates_uniqueness_of :name 
@@ -32,12 +33,20 @@ class Enterprise < ActiveRecord::Base
 
   named_scope :active, :conditions => {:active => true}, :order => "name ASC"
   
-  def self.list(page, per_page, start_filter, end_filter)
+  def self.list(page, per_page, start_filter, end_filter, ids)
+    conditions = []
+    unless start_filter == 'All'
+      conditions << "name >= ? and name <= ?"
+      conditions << start_filter
+      conditions << end_filter
+    end
+    unless ids.nil?
+      conditions << "id in (?)"
+      conditions << ids
+    end
     paginate :page => page, :order => 'name', 
       :per_page => per_page,
-      :conditions => ["(name >= ? and name <= ?) or ? = 'All'",
-      start_filter, end_filter, start_filter
-    ]
+      :conditions => conditions
   end
 
   def can_delete?
