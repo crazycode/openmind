@@ -33,7 +33,8 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   acts_as_ordered :order => 'email'
   ajaxful_rater
-  acts_as_solr :fields => [:email, :first_name, :last_name], :include => [:enterprise]
+  acts_as_solr :fields => [:email, :first_name, :last_name], 
+    :include => [:enterprise]
 
   
   # Virtual attribute for the unencrypted password

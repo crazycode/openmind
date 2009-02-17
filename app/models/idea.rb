@@ -157,7 +157,9 @@ class Idea < ActiveRecord::Base
     unless title_filter.nil? or title_filter.blank?
       search_results = []
       begin
-        search_results = Idea.find_by_solr(StringUtils.sanitize_search_terms(title_filter)).docs.collect(&:id)
+        search_results = 
+          Idea.find_by_solr(StringUtils.sanitize_search_terms(title_filter),
+          :lazy => true).docs.collect(&:id)
       rescue RuntimeError => e
         logger.error(e)
       end

@@ -31,7 +31,7 @@ class EnterprisesController < ApplicationController
     params[:search] = StringUtils.sanitize_search_terms params[:search]
     set_start_end_tags
     begin
-      search_results = Enterprise.find_by_solr(params[:search]).docs.collect(&:id)
+      search_results = Enterprise.find_by_solr(params[:search], :lazy => true).docs.collect(&:id)
     rescue RuntimeError => e
       flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
       logger.error(e)
