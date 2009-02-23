@@ -8,11 +8,11 @@
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= error_messages_for 'forum' %>
 <h1><%= theme_image_tag("icons/32x32/forums.png", options = {:alt=>"Forum"}) %>Forums</h1>
-<% if current_user != :false and sysadmin? %>
+<% if current_user != :false %>
   <div id="actionButtons2" style="float:right; margin-top:-40px;">
     <%= link_to 'New Forum', new_forum_path,
       html_options = {:class => "button",
-      :onmouseover => "Tip('Create a new forum')"} %>
+      :onmouseover => "Tip('Create a new forum')"} if sysadmin? %>
     <%= link_to 'Metrics', metrics_forums_path,
       html_options = {:class => "button",
       :onmouseover => "Tip('View management metrics')"} if current_user.mediator? and !Forum.active.tracked.empty? %>
