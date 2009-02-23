@@ -160,7 +160,7 @@ module ApplicationHelper
   end
   
   def user_display_name user
-    full = prodmgr? or sysadmin? or allocmgr? unless current_user == :false
+    full = (prodmgr? or sysadmin? or allocmgr? or current_user.mediator?) unless current_user == :false
     user.display_name full unless user.nil?
   end
   
