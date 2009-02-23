@@ -22,7 +22,7 @@
       <ul class="navlist2">
         <% for user in TopicComment.top_users(@topic.forum) %>
           <li>
-            <%= user_display_name user %> (<%= pluralize user.topic_comments.size, "post"  %>)
+            <%= user_display_name user %> (<%= pluralize user.topic_comments.find(:all, :conditions => ["topic_id in (select id from topics where forum_id = ?)", @topic.forum.id]).size, "post"  %>)
           </li>
         <% end %>
       </ul>
