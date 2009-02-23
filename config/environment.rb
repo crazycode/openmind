@@ -99,7 +99,7 @@ if File.exists?(path) && (env_config = YAML.load_file(path))
 end
 
 WhiteListHelper.tags.merge %w(u table tbody tr td)
-WhiteListHelper.attributes.merge %w(id class style)
+WhiteListHelper.attributes.merge %w(id class style src target align)
 
 #TagList.delimiter = " "
 
