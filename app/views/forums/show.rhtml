@@ -56,10 +56,10 @@
     <%= hidden_field_tag 'form_based', 'yes' %>
     <%= check_box_tag 'show_open', 'yes', session[:topics_show_open] == 'yes',
       {:onmouseover => "Tip('Include open topics in the listing')",
-      :onchange => 'document.filter.submit();'} %>&nbsp;Show open topics&nbsp;&nbsp;&nbsp;
+      :onclick => 'document.filter.submit();'} %>&nbsp;Show open topics&nbsp;&nbsp;&nbsp;
     <%= check_box_tag 'show_closed', 'yes', session[:topics_show_closed] == 'yes',
       {:onmouseover => "Tip('Include closed topics in the listing')",
-      :onchange => 'document.filter.submit();'} %>&nbsp;Show closed topics&nbsp;&nbsp;&nbsp;
+      :onclick => 'document.filter.submit();'} %>&nbsp;Show closed topics&nbsp;&nbsp;&nbsp;
     <b>Filter by Owner:</b>
         <%= select_tag :owner_filter,
         options_for_select(mediator_owner_filter_list, session[:topics_owner_filter].to_i),
