@@ -18,7 +18,7 @@
       </p>
       <p>
         <label for="topic_owner">Owner:</label>
-        <%=form.collection_select :owner_id, @topic.forum.mediators, :id,
+        <%=form.collection_select :owner_id, mediators, :id,
           :email, { :prompt => "Please select..." } %>
       </p>
     <% end %>
