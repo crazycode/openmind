@@ -4,7 +4,7 @@
       <th>Forum</th>
       <th>
         Topics (Unread)
-        <% if current_user.mediator? and !forums.find_all{|f| f.tracked}.empty? %>
+        <% if logged_in? and current_user.mediator? and !forums.find_all{|f| f.tracked}.empty? %>
           [Open]
         <% end %>
       </th>

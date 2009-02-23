@@ -8,7 +8,7 @@
     </td>
     <td>
       <%= forum_item.topics.count %> (<%= forum_item.unread_topics(current_user).size %>)
-      <% if forum_item.tracked and forum_item.mediators.include? current_user %>
+      <% if logged_in? and forum_item.tracked and forum_item.mediators.include? current_user %>
         [<%= forum_item.topics.open.count %>]
       <% end %>
     </td>
