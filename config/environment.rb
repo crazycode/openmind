@@ -98,8 +98,8 @@ if File.exists?(path) && (env_config = YAML.load_file(path))
   APP_CONFIG.merge!(env_config)
 end
 
-WhiteListHelper.tags.merge %w(u table tbody tr td)
-WhiteListHelper.attributes.merge %w(id class style src target align)
+WhiteListHelper.tags.merge %w(u table tbody tr td iframe)
+WhiteListHelper.attributes.merge %w(id class style src target align frameborder marginheight marginwidth)
 
 #TagList.delimiter = " "
 
@@ -112,4 +112,3 @@ WhiteListHelper.attributes.merge %w(id class style src target align)
 #    text.gsub!( /(.)\n(?!\n|\Z| *([#*=]+(\s|$)|[{|]))/, "\\1<br />" ) if hard_breaks
 #  end
 # #end
- 
