@@ -10,7 +10,7 @@ class Attachment < ActiveRecord::Base
   include Magick
   after_create :create_thumbnail
   before_update :before_update
-  acts_as_solr :fields => [:filename, :description, {:size => :integer}],  :if => proc{|a| a.parent.nil?}
+  acts_as_solr :fields => [:filename, :alias, :description, {:size => :integer}],  :if => proc{|a| a.parent.nil?}
   
   validates_presence_of :filename, :description, :content_type, :size
   validates_length_of :filename, :maximum => 200
