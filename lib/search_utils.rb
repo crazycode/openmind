@@ -8,5 +8,6 @@ class SearchUtils
     Idea.rebuild_solr_index
     User.rebuild_solr_index
     Enterprise.rebuild_solr_index
+    Attachment.rebuild_solr_index
   end
 end

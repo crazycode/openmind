@@ -14,7 +14,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :allocations, :collection => { :export_import => :get,
     :export => :post, :import => :post, :toggle_pix => :get }
   map.resources :announcements, :collection => { :preview => :get, :rss => :get }
-  map.resources :attachments, :member => { :download => :get }
+  map.resources :attachments, :member => { :download => :get },
+    :collection => { :search => :get }
   map.resources :comments, :collection => { :preview => :get },
     :member => { :endorse => :post, :unendorse => :post, :attach => :get,
     :privatize => :post, :publicize => :post, :promote_power_user => :post }

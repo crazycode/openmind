@@ -13,8 +13,25 @@ class AttachmentsController < ApplicationController
     :redirect_to => { :action => :index }
 
   def index
+    session[:attachments_search] = nil
     @attachment ||= Attachment.new(:public => true)
     @attachments = Attachment.list params[:page], current_user.row_limit
+  end
+
+  def search
+    session[:attachments_search] = params[:search]
+
+    params[:search] = StringUtils.sanitize_search_terms params[:search]
+    begin
+      search_results = Attachment.find_by_solr(params[:search], :lazy => true).docs.collect(&:id)
+    rescue RuntimeError => e
+      flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
+      logger.error(e)
+      redirect_to attachments_path
+    else
+      @attachments = Attachment.list params[:page], 999, search_results
+      render :action => 'index'
+    end
   end
 
   def edit

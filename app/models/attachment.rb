@@ -10,6 +10,7 @@ class Attachment < ActiveRecord::Base
   include Magick
   after_create :create_thumbnail
   before_update :before_update
+  acts_as_solr :fields => [:filename, :description, {:size => :integer}],  :if => proc{|a| a.parent.nil?}
   
   validates_presence_of :filename, :description, :content_type, :size
   validates_length_of :filename, :maximum => 200
@@ -46,9 +47,14 @@ class Attachment < ActiveRecord::Base
     user.prodmgr? or user.sysadmin? or self.user == user
   end
 
-  def self.list(page, per_page)
+  def self.list(page, per_page, ids=nil)
+    conditions = {}
+    conditions[:parent_attachment_id] = nil
+    unless ids.nil?
+      conditions[:id] = ids
+    end
     paginate :page => page, 
-      :conditions => 'parent_attachment_id IS NULL',
+      :conditions => conditions,
       :order => 'id DESC',
       :per_page => per_page
   end
