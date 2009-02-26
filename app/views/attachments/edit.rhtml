@@ -44,6 +44,15 @@
           </span>
         <% end %>
       </p>
+      <p>
+        <label>Restrict to User Groups:</label>
+        <% for group in Group.by_name %>
+          <span style="display:block;margin-left:10px;">
+            <%= check_box_tag "attachment[group_ids][]", group.id, @attachment.groups.include?(group) %>
+            <%= h group.name %>: <%= h group.description %>
+          </span>
+        <% end %>
+      </p>
     </div>
     <div id="buttons">
       <%= render(:partial => "buttons", :object => @attachment) %>

@@ -44,6 +44,7 @@ class AttachmentsController < ApplicationController
 
   def update
     params[:attachment][:enterprise_type_ids] ||= []
+    params[:attachment][:group_ids] ||= []
     @attachment = Attachment.find(params[:id])
     if @attachment.update_attributes(params[:attachment])
       unless from_comment? params

@@ -24,6 +24,7 @@ class Attachment < ActiveRecord::Base
   # this image is not a thumbnail
   belongs_to :parent, :class_name => 'Attachment', :foreign_key => :parent_attachment_id
   has_and_belongs_to_many :enterprise_types
+  has_and_belongs_to_many :groups
 
   def file=(incoming_file)
     self.filename = incoming_file.original_filename
@@ -40,7 +41,9 @@ class Attachment < ActiveRecord::Base
     return true if self.public
     return false if user == :false or user.nil?
     return true if user.mediator?
-    self.enterprise_types.empty? or self.enterprise_types.include? user.enterprise.enterprise_type
+    (self.enterprise_types.empty? and self.groups.empty?) or 
+      self.enterprise_types.include? user.enterprise.enterprise_type or
+      !self.groups.select{|group| group.users.include? user}.empty?
   end
 
   def can_delete? user

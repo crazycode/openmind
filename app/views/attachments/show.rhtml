@@ -22,12 +22,21 @@
     <label>Access:</label>
     <% if @attachment.public %>
       Public viewable
-    <% elsif @attachment.enterprise_types.empty? %>
+    <% elsif @attachment.enterprise_types.empty? and @attachment.groups.empty? %>
       Must be logged in
     <% else  %>
-      Restricted to the following Enterprise Types:
-      <% for etype in @attachment.enterprise_types %><br />
-        &bull;&nbsp;<%= h etype.short_name %><br />
+      <% unless @attachment.groups.empty?  %>
+        Restricted to the following User Groups:
+        <% for group in @attachment.groups %><br />
+          &bull;&nbsp;<%= h group.name %><br />
+        <% end %>
+      <% end %>
+      <% unless @attachment.enterprise_types.empty?  %>
+        <%= "<br/>" unless @attachment.groups.empty? %>
+        Restricted to the following Enterprise Types:
+        <% for etype in @attachment.enterprise_types %><br />
+          &bull;&nbsp;<%= h etype.short_name %><br />
+        <% end %>
       <% end %>
     <% end %>
   </p>
