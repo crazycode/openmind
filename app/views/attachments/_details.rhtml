@@ -15,4 +15,10 @@
     <label>Download URL:</label>
     <%= link_to download_url(details), download_url(details) %>
   </p>
+  <% if details.content_type == 'text/html' %>
+    <p>
+      <label>Web Page URL:</label>
+      <%= link_to html_url(details), html_url(details) %>
+    </p>
+  <% end %>
 </div>

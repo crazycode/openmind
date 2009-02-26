@@ -14,7 +14,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :allocations, :collection => { :export_import => :get,
     :export => :post, :import => :post, :toggle_pix => :get }
   map.resources :announcements, :collection => { :preview => :get, :rss => :get }
-  map.resources :attachments, :member => { :download => :get },
+  map.resources :attachments, :member => { :download => :get, :html => :get },
     :collection => { :search => :get }
   map.resources :comments, :collection => { :preview => :get },
     :member => { :endorse => :post, :unendorse => :post, :attach => :get,
@@ -56,6 +56,7 @@ ActionController::Routing::Routes.draw do |map|
   
   # Install the default route as the lowest priority.
   map.connect 'download/:id', :controller => 'attachments', :action => 'download'
+  map.connect 'html/:id', :controller => 'attachments', :action => 'html'
   map.connect ':controller/:action/:id.:format'
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action.:format'
