@@ -1,8 +1,16 @@
-#   t.column :filename, :string, :limit => 50, :null => false
-#   t.column :description, :string, :limit => 200, :null => false
-#   t.column :content_type, :string, :limit => 20, :null => false
-#   t.column :size, :integer, :null => false
-#   t.column :data, :binary, :null => false
+#    t.string   "filename",             :limit => 200,                          :null => false
+#    t.string   "description",          :limit => 200,                          :null => false
+#    t.string   "content_type",         :limit => 100,                          :null => false
+#    t.integer  "user_id",                                                      :null => false
+#    t.integer  "comment_id"
+#    t.integer  "parent_attachment_id"
+#    t.integer  "size",                                                         :null => false
+#    t.binary   "data",                 :limit => 2147483647
+#    t.datetime "created_at"
+#    t.datetime "updated_at"
+#    t.boolean  "public",                                     :default => true, :null => false
+#    t.integer  "downloads",                                  :default => 0,    :null => false
+#    t.string   "alias",                :limit => 40
 require 'fileutils'
 require 'RMagick'
 
@@ -56,7 +64,8 @@ class Attachment < ActiveRecord::Base
     unless ids.nil?
       conditions[:id] = ids
     end
-    paginate :page => page, 
+    paginate :page => page,
+      :select => "filename, description, content_type, user_id, comment_id, parent_attachment_id, size, created_at, updated_at, public, downloads, alias",
       :conditions => conditions,
       :order => 'id DESC',
       :per_page => per_page
