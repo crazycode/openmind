@@ -37,6 +37,7 @@ class ForumsControllerTest < Test::Unit::TestCase
     should_respond_with :success
     should_render_template 'search'
     should_not_set_the_flash
+    #    assert_nil flash[:error]`
     should_assign_to :hits
   end
   

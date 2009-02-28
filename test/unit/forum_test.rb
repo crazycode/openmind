@@ -48,7 +48,7 @@ class ForumTest < Test::Unit::TestCase
     should "not return unread comment" do
       # forum with no topics
       assert forums(:empty_bugs_forum).unread_topics(users(:quentin)).empty?
-      
+
       # forum that has been read
       assert topics(:bug_topic1).forum.unread_topics(users(:aaron)).empty?
     end

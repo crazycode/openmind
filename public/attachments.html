@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>OpenMind: index</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="Content-Language" content="en-us" />
+    <link href="/stylesheets/../themes/openmind/cache/global.css?1235763101" media="screen" rel="stylesheet" type="text/css" />
+    
+    <script src="/javascripts/cache/app.js?1235763101" type="text/javascript"></script>
+
+    
+    <!--[if lte IE 6]>
+<link href="/stylesheets/../themes/openmind/cache/png_fix.css?1235763101" media="screen" rel="stylesheet" type="text/css" />
+    <![endif]-->
+  </head>
+  <body  onload="document.getElementById('attachments_search').focus();">
+    <a name="top"/>
+    <div id="headerBackground">
+      <div id="headerBrandingAreaPageWrap">
+        <div class="inside">
+          <div id="headerTopNavBar">
+            <ul class="headerTopNavMenu">
+              <li><a href="/static/help">Help</a></li>
+              
+                <li><a href="/account/change_password">Change Password</a></li>
+                <li><a href="/users/edit_profile">Update Profile</a></li>
+                <li><a href="/account/logout">Logout</a></li>
+              
+            </ul>
+          </div>
+          <div id="headerBrandingArea"><a href="/ideas"><img alt="branding logo" src="/themes/openmind/images/headers/headerBrandingLogo.jpg" /></a>
+            <!-- flash notices -->
+            
+              <div id="flash_notice" class="flash flashNotice" style="display:none;"></div>
+            
+
+            
+              <div id="flash_error" class="flash flashError" style="display:none;"></div>
+            
+          </div>
+          
+            <ul id="headerLowerNavMenu">
+              <li><a href="/ideas">Ideas</a></li><li><a href="/forums">Forums</a></li><li><a href="/releases/list">Roadmap</a></li><li><a href="/users">Users</a></li><li><a href="/enterprises">Enterprises</a></li><li><a href="/allocations">Allocations</a></li><li><a href="/votes">Votes</a></li><li><a href="/announcements">Announcements</a></li><li><a href="/attachments" class="current">Attachments</a></li><li><a href="/polls">Polls</a></li><li><a href="/periodic_jobs">Admin</a></li>
+            </ul>
+          
+          <br style="clear: left" />
+        </div>
+      </div>
+    </div>
+
+    <div id="mainBodyPageWrap">
+      <div class="inside">
+        
+                
+        <div id="main-contentShell">
+          <div id="main-content">
+            <!-- form container start -->
+            <div class="formContainer">
+              
+<script src="/javascripts/cache/tooltip.js?1235763100" type="text/javascript"></script>
+ 
+
+<h1><img alt="Attachments" src="/themes/openmind/images/icons/32x32/paperclip.png?1226852340" />Attachments</h1>
+  <form action="/attachments/search" class="cssform searchform" method="post" name="search">    <p>
+      <label for="search">Search:</label>
+      <input id="attachments_search" name="search" type="text" />
+      <input class="button" onmouseover="Tip('Search attachments')" type="submit" value="Search" />
+      <br/>
+      <a href="/static/search" onclick="window.open(this.href);return false;">search syntax help</a>
+    </p>
+  </form>
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>File Name</th>
+    <th>Description</th>
+    <th>Public</th>
+    <th>Alias</th>
+    <th>Filesize</th>
+    <th>Type</th>
+    <th>Hits</th>
+    <th>Author</th>
+    <th>Uploaded At</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <form action="/attachments" enctype="multipart/form-data" method="post">
+      <td>
+        
+          <input id="attachment_file" name="attachment[file]" size="30" type="file" />
+        
+      </td>
+      <td><input id="attachment_description" maxlength="200" name="attachment[description]" size="30" type="text" /></td>
+      <td class="center"><input checked="checked" id="attachment_public" name="attachment[public]" onmouseover="Tip('Public attachments can be viewed even if a user is not logged in')" type="checkbox" value="true" /><input name="attachment[public]" type="hidden" value="false" /></td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><input class="button" name="commit" onclick="this.setAttribute('originalValue', this.value);this.disabled=true;this.value='Please wait...';result = (this.form.onsubmit ? (this.form.onsubmit() ? this.form.submit() : false) : this.form.submit());if (result == false) { this.value = this.getAttribute('originalValue'); this.disabled = false };return result;" onmouseover="Tip('Create a new attachment')" type="submit" value="Upload" /></td>
+    </tr>
+  </form>
+
+  <tr>
+  <td>jingtest.swf</td>
+  <td>
+    jing test
+    
+  </td>
+  <td class="center"><input type="checkbox" name="public" disabled="true" value="true" checked</td>
+  <td></td>
+  <td>356 KB</td>
+  <td>application/x-sho...</td>
+  <td>1</td>
+  <td>Bob Sturim (bob@sturim.org)</td>
+  <td>Feb 25, 2009 10:34PM</td>
+  <td style="white-space:nowrap;">
+    <a href="/attachments/" onmouseover="Tip('View details for this attachment')"><img alt="view" src="/themes/openmind/images/icons/16x16/viewAction.png?1224198670" title="view" /></a>
+    <a href="/attachments//edit" onmouseover="Tip('Edit this attachment')"><img alt="edit" src="/themes/openmind/images/icons/16x16/editAction.png?1224198670" title="edit" /></a>
+    
+    <a href="/attachments/" onclick="if (confirm('Are you sure?')) { var f = document.createElement('form'); f.style.display = 'none'; this.parentNode.appendChild(f); f.method = 'POST'; f.action = this.href;var m = document.createElement('input'); m.setAttribute('type', 'hidden'); m.setAttribute('name', '_method'); m.setAttribute('value', 'delete'); f.appendChild(m);f.submit(); };return false;" onmouseover="Tip('Delete this attachment')"><img alt="delete" src="/themes/openmind/images/icons/16x16/deleteAction.png?1224198669" title="delete" /></a>
+  </td>
+</tr>
+<tr>
+  <td>snap.png</td>
+  <td>
+    blah
+    
+  </td>
+  <td class="center"><input type="checkbox" name="public" disabled="true" value="true" checked</td>
+  <td>checklist</td>
+  <td>48 KB</td>
+  <td>image/png</td>
+  <td>22</td>
+  <td>Bob Sturim (bob@sturim.org)</td>
+  <td>Feb 25, 2009 10:12PM</td>
+  <td style="white-space:nowrap;">
+    <a href="/attachments/" onmouseover="Tip('View details for this attachment')"><img alt="view" src="/themes/openmind/images/icons/16x16/viewAction.png?1224198670" title="view" /></a>
+    <a href="/attachments//edit" onmouseover="Tip('Edit this attachment')"><img alt="edit" src="/themes/openmind/images/icons/16x16/editAction.png?1224198670" title="edit" /></a>
+    
+    <a href="/attachments/" onclick="if (confirm('Are you sure?')) { var f = document.createElement('form'); f.style.display = 'none'; this.parentNode.appendChild(f); f.method = 'POST'; f.action = this.href;var m = document.createElement('input'); m.setAttribute('type', 'hidden'); m.setAttribute('name', '_method'); m.setAttribute('value', 'delete'); f.appendChild(m);f.submit(); };return false;" onmouseover="Tip('Delete this attachment')"><img alt="delete" src="/themes/openmind/images/icons/16x16/deleteAction.png?1224198669" title="delete" /></a>
+  </td>
+</tr>
+<tr>
+  <td>Parts_List_Updates_instructions.doc</td>
+  <td>
+    Instructions
+    
+  </td>
+  <td class="center"><input type="checkbox" name="public" disabled="true" value="true" checked</td>
+  <td>checklistx</td>
+  <td>26 KB</td>
+  <td>application/msword</td>
+  <td>0</td>
+  <td>Bob Sturim (bob@sturim.org)</td>
+  <td>Feb 25, 2009 10:09PM</td>
+  <td style="white-space:nowrap;">
+    <a href="/attachments/" onmouseover="Tip('View details for this attachment')"><img alt="view" src="/themes/openmind/images/icons/16x16/viewAction.png?1224198670" title="view" /></a>
+    <a href="/attachments//edit" onmouseover="Tip('Edit this attachment')"><img alt="edit" src="/themes/openmind/images/icons/16x16/editAction.png?1224198670" title="edit" /></a>
+    
+    <a href="/attachments/" onclick="if (confirm('Are you sure?')) { var f = document.createElement('form'); f.style.display = 'none'; this.parentNode.appendChild(f); f.method = 'POST'; f.action = this.href;var m = document.createElement('input'); m.setAttribute('type', 'hidden'); m.setAttribute('name', '_method'); m.setAttribute('value', 'delete'); f.appendChild(m);f.submit(); };return false;" onmouseover="Tip('Delete this attachment')"><img alt="delete" src="/themes/openmind/images/icons/16x16/deleteAction.png?1224198669" title="delete" /></a>
+  </td>
+</tr>
+<tr>
+  <td>test.html</td>
+  <td>
+    in IE
+    
+  </td>
+  <td class="center"><input type="checkbox" name="public" disabled="true" value="true" </td>
+  <td></td>
+  <td>845 Bytes</td>
+  <td>text/html</td>
+  <td>6</td>
+  <td>Bob Sturim (bob@sturim.org)</td>
+  <td>Feb 25, 2009 08:31PM</td>
+  <td style="white-space:nowrap;">
+    <a href="/attachments/" onmouseover="Tip('View details for this attachment')"><img alt="view" src="/themes/openmind/images/icons/16x16/viewAction.png?1224198670" title="view" /></a>
+    <a href="/attachments//edit" onmouseover="Tip('Edit this attachment')"><img alt="edit" src="/themes/openmind/images/icons/16x16/editAction.png?1224198670" title="edit" /></a>
+    
+    <a href="/attachments/" onclick="if (confirm('Are you sure?')) { var f = document.createElement('form'); f.style.display = 'none'; this.parentNode.appendChild(f); f.method = 'POST'; f.action = this.href;var m = document.createElement('input'); m.setAttribute('type', 'hidden'); m.setAttribute('name', '_method'); m.setAttribute('value', 'delete'); f.appendChild(m);f.submit(); };return false;" onmouseover="Tip('Delete this attachment')"><img alt="delete" src="/themes/openmind/images/icons/16x16/deleteAction.png?1224198669" title="delete" /></a>
+  </td>
+</tr>
+<tr>
+  <td>test2.htm</td>
+  <td>
+    test web page 2 (forum group)
+    
+  </td>
+  <td class="center"><input type="checkbox" name="public" disabled="true" value="true" </td>
+  <td></td>
+  <td>845 Bytes</td>
+  <td>text/html</td>
+  <td>2</td>
+  <td>Bob Sturim (bob@sturim.org)</td>
+  <td>Feb 25, 2009 08:29PM</td>
+  <td style="white-space:nowrap;">
+    <a href="/attachments/" onmouseover="Tip('View details for this attachment')"><img alt="view" src="/themes/openmind/images/icons/16x16/viewAction.png?1224198670" title="view" /></a>
+    <a href="/attachments//edit" onmouseover="Tip('Edit this attachment')"><img alt="edit" src="/themes/openmind/images/icons/16x16/editAction.png?1224198670" title="edit" /></a>
+    
+    <a href="/attachments/" onclick="if (confirm('Are you sure?')) { var f = document.createElement('form'); f.style.display = 'none'; this.parentNode.appendChild(f); f.method = 'POST'; f.action = this.href;var m = document.createElement('input'); m.setAttribute('type', 'hidden'); m.setAttribute('name', '_method'); m.setAttribute('value', 'delete'); f.appendChild(m);f.submit(); };return false;" onmouseover="Tip('Delete this attachment')"><img alt="delete" src="/themes/openmind/images/icons/16x16/deleteAction.png?1224198669" title="delete" /></a>
+  </td>
+</tr>
+<tr>
+  <td>test.html</td>
+  <td>
+    test web page (group a)
+    
+  </td>
+  <td class="center"><input type="checkbox" name="public" disabled="true" value="true" </td>
+  <td>downloads</td>
+  <td>845 Bytes</td>
+  <td>text/html</td>
+  <td>2</td>
+  <td>Bob Sturim (bob@sturim.org)</td>
+  <td>Feb 25, 2009 08:28PM</td>
+  <td style="white-space:nowrap;">
+    <a href="/attachments/" onmouseover="Tip('View details for this attachment')"><img alt="view" src="/themes/openmind/images/icons/16x16/viewAction.png?1224198670" title="view" /></a>
+    <a href="/attachments//edit" onmouseover="Tip('Edit this attachment')"><img alt="edit" src="/themes/openmind/images/icons/16x16/editAction.png?1224198670" title="edit" /></a>
+    
+    <a href="/attachments/" onclick="if (confirm('Are you sure?')) { var f = document.createElement('form'); f.style.display = 'none'; this.parentNode.appendChild(f); f.method = 'POST'; f.action = this.href;var m = document.createElement('input'); m.setAttribute('type', 'hidden'); m.setAttribute('name', '_method'); m.setAttribute('value', 'delete'); f.appendChild(m);f.submit(); };return false;" onmouseover="Tip('Delete this attachment')"><img alt="delete" src="/themes/openmind/images/icons/16x16/deleteAction.png?1224198669" title="delete" /></a>
+  </td>
+</tr>
+<tr>
+  <td>20090126.xlsx</td>
+  <td>
+    expense report
+    
+  </td>
+  <td class="center"><input type="checkbox" name="public" disabled="true" value="true" checked</td>
+  <td>xp</td>
+  <td>69.4 KB</td>
+  <td>application/vnd.o...</td>
+  <td>4</td>
+  <td>Bob Sturim (bob@sturim.org)</td>
+  <td>Feb 13, 2009 08:58PM</td>
+  <td style="white-space:nowrap;">
+    <a href="/attachments/" onmouseover="Tip('View details for this attachment')"><img alt="view" src="/themes/openmind/images/icons/16x16/viewAction.png?1224198670" title="view" /></a>
+    <a href="/attachments//edit" onmouseover="Tip('Edit this attachment')"><img alt="edit" src="/themes/openmind/images/icons/16x16/editAction.png?1224198670" title="edit" /></a>
+    
+    <a href="/attachments/" onclick="if (confirm('Are you sure?')) { var f = document.createElement('form'); f.style.display = 'none'; this.parentNode.appendChild(f); f.method = 'POST'; f.action = this.href;var m = document.createElement('input'); m.setAttribute('type', 'hidden'); m.setAttribute('name', '_method'); m.setAttribute('value', 'delete'); f.appendChild(m);f.submit(); };return false;" onmouseover="Tip('Delete this attachment')"><img alt="delete" src="/themes/openmind/images/icons/16x16/deleteAction.png?1224198669" title="delete" /></a>
+  </td>
+</tr>
+<tr>
+  <td>Scribe_Software_Maintenance_Plan_Overview.pdf</td>
+  <td>
+    plan
+    
+  </td>
+  <td class="center"><input type="checkbox" name="public" disabled="true" value="true" checked</td>
+  <td></td>
+  <td>63.5 KB</td>
+  <td>application/pdf</td>
+  <td>3</td>
+  <td>Bob Sturim (bob@sturim.org)</td>
+  <td>Feb 12, 2009 09:40PM</td>
+  <td style="white-space:nowrap;">
+    <a href="/attachments/" onmouseover="Tip('View details for this attachment')"><img alt="view" src="/themes/openmind/images/icons/16x16/viewAction.png?1224198670" title="view" /></a>
+    <a href="/attachments//edit" onmouseover="Tip('Edit this attachment')"><img alt="edit" src="/themes/openmind/images/icons/16x16/editAction.png?1224198670" title="edit" /></a>
+    
+    <a href="/attachments/" onclick="if (confirm('Are you sure?')) { var f = document.createElement('form'); f.style.display = 'none'; this.parentNode.appendChild(f); f.method = 'POST'; f.action = this.href;var m = document.createElement('input'); m.setAttribute('type', 'hidden'); m.setAttribute('name', '_method'); m.setAttribute('value', 'delete'); f.appendChild(m);f.submit(); };return false;" onmouseover="Tip('Delete this attachment')"><img alt="delete" src="/themes/openmind/images/icons/16x16/deleteAction.png?1224198669" title="delete" /></a>
+  </td>
+</tr>
+
+
+</table>
+<p>
+  <div class="digg_pagination">
+    <div class="page_info">
+      Displaying <b>all 8</b> attachments
+    </div>
+    
+  </div>
+</p>
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+        </div>
+        <div id="footer">
+          <div id="footerLeft">Logged in as: Bob Sturim (bob@sturim.org)<span class="separator">|</span>
+          Contact <script type="text/javascript">eval(unescape('%64%6f%63%75%6d%65%6e%74%2e%77%72%69%74%65%28%27%3c%61%20%68%72%65%66%3d%22%6d%61%69%6c%74%6f%3a%61%64%6d%69%6e%40%6f%70%65%6e%6d%69%6e%64%2e%6f%72%67%22%3e%53%79%73%74%65%6d%20%41%64%6d%69%6e%69%73%74%72%61%74%6f%72%3c%2f%61%3e%27%29%3b'))</script></div>
+          <div id="footerRight">Powered by <a href="http://openmind.sourceforge.net/">Openmind</a> v2.3.0.29<span class="separator">|</span>Distributed under the <a href="/static/license">GNU GPL license</a></div>
+        </div>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+  </body>
+</html>

@@ -133,7 +133,8 @@ class TopicsController < ApplicationController
       logger.error(e)
     else
       # not sure why this is necessary
-      flash[:error] = nil
+      #      flash[:error] = nil
+      flash.discard
       
       if search_results.nil?
         redirect_to forum_path(@forum)

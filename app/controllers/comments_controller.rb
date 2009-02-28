@@ -147,7 +147,7 @@ class CommentsController < ApplicationController
 
   def redirect_path_on_access_denied user
     return forums_path unless user == :false
-    return url_for :controller => 'account', :action => 'login', :only_path => true if user == :false
+    return url_for(:controller => 'account', :action => 'login', :only_path => true) if user == :false
   end
 
   def create_idea_comment
