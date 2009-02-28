@@ -65,7 +65,7 @@ class Attachment < ActiveRecord::Base
       conditions[:id] = ids
     end
     paginate :page => page,
-      :select => "filename, description, content_type, user_id, comment_id, parent_attachment_id, size, created_at, updated_at, public, downloads, alias",
+      :select => "id, filename, description, content_type, user_id, comment_id, parent_attachment_id, size, created_at, updated_at, public, downloads, alias",
       :conditions => conditions,
       :order => 'id DESC',
       :per_page => per_page
