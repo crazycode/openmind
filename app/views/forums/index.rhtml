@@ -37,10 +37,11 @@
       :popup => true %>
   </p>
 <% end %>
+<% cache(:controller => "forums", :action => "index", :user_id => (logged_in? ? current_user.id : -1)) do %>
+  <%=render(:partial => "forum_group", :locals => { :forums => @forums })%>
 
-<%=render(:partial => "forum_group", :locals => { :forums => @forums })%>
-
-<% for forum_group in @forum_groups %>
-  <h2><%= forum_group.short_name %></h2>
-  <%=render(:partial => "forum_group", :locals => { :forums => forum_group.forums })%>
+  <% for forum_group in @forum_groups %>
+    <h2><%= forum_group.short_name %></h2>
+    <%=render(:partial => "forum_group", :locals => { :forums => forum_group.forums })%>
+  <% end %>
 <% end %>

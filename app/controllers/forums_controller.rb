@@ -3,6 +3,7 @@ class ForumsController < ApplicationController
   access_control [:new, :destroy ] => 'sysadmin',
     [:edit, :create, :update, :metrics ] => 'sysadmin|mediator'
   helper :topics
+  cache_sweeper :forums_sweeper, :only => [ :create, :update, :destroy ]
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :mark_all_as_read ],
@@ -52,9 +53,10 @@ class ForumsController < ApplicationController
   end
   
   def index
-    #    @forums = Forum.list params[:page], (current_user == :false ? 10 : current_user.row_limit)
-    @forums = Forum.list_by_forum_group.find_all{|forum| forum.can_see? current_user}
-    @forum_groups = ForumGroup.list_all current_user
+    unless read_fragment({:user_id => (logged_in? ? current_user.id : -1)})
+      @forums = Forum.list_by_forum_group.find_all{|forum| forum.can_see? current_user}
+      @forum_groups = ForumGroup.list_all current_user
+    end
   end
 
   def self.week_size

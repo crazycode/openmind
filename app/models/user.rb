@@ -31,7 +31,6 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
-  acts_as_ordered :order => 'email'
   ajaxful_rater
   acts_as_solr :fields => [:email, :first_name, :last_name], 
     :include => [:enterprise]
@@ -116,6 +115,16 @@ class User < ActiveRecord::Base
     :joins => [:roles],
     :conditions => "roles.title = 'Mediator'",
     :order => 'users.email'
+
+  named_scope :next,
+    lambda{|email|{:conditions => ['email > ?', email],
+      :order => 'email',
+      :limit => 1}}
+
+  named_scope :previous,
+    lambda{|email|{:conditions => ['email < ?', email],
+      :order => 'email desc',
+      :limit => 1}}
 
   def self.row_limit_options
     [10, 25, 50, 100]

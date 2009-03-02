@@ -151,14 +151,24 @@ class IdeasController < ApplicationController
   end
 
   def next
-    @idea = Idea.find(params[:id]).next
-    mark_as_read @idea
+    ideas = Idea.next(params[:id])
+    if ideas.empty?
+      @idea = Idea.find(params[:id])
+    else
+      @idea = ideas.first
+      mark_as_read @idea
+    end
     render :action => 'show'
   end
 
   def previous
-    @idea = Idea.find(params[:id]).previous
-    mark_as_read @idea
+    ideas = Idea.previous(params[:id])
+    if ideas.empty?
+      @idea = Idea.find(params[:id])
+    else
+      @idea = ideas.first
+      mark_as_read @idea
+    end
     render :action => 'show'
   end
 

@@ -19,7 +19,8 @@ module ForumsHelper
     
     author = user_display_name last_comment.user
     author = boldify(author) if last_comment.topic.unread_comment?(current_user)
-    "#{subject}<br/>#{author} wrote \"#{truncate StringUtils.strip_html(comment), 40}\"<br/>#{om_date_time last_comment.created_at}"
+    "#{subject}<br/>#{author} wrote \"#{truncate StringUtils.strip_html(comment), 
+    :length => 40}\"<br/>#{om_date_time last_comment.created_at}"
   end
 
   def dummy_all_forum
@@ -53,7 +54,7 @@ module ForumsHelper
     
     author = user_display_name topic.last_comment.user
     author = boldify(author) if topic.unread_comment?(current_user)
-    "#{author} wrote \"#{link_to truncate(StringUtils.strip_html(comment), 40), 
+    "#{author} wrote \"#{link_to truncate(StringUtils.strip_html(comment), :length => 40),
     topic_path(topic.id, :anchor => topic.last_comment.id)}\"<br/>#{om_date_time topic.last_comment.created_at}"
   end
   
@@ -147,7 +148,7 @@ module ForumsHelper
     if forum.nil?
       # Restrict tags for forums that the user has access to
       Topic.tag_counts(:limit => 100, :conditions => ["topics.id in (?)",
-        Forum.find(:all).find_all{|f| f.can_see? current_user}.collect(&:topics).flatten.collect(&:id)])
+          Forum.find(:all).find_all{|f| f.can_see? current_user}.collect(&:topics).flatten.collect(&:id)])
     else
       forum.topics.tag_counts(:limit => 100)
     end

@@ -50,12 +50,24 @@ class EnterprisesController < ApplicationController
   end
 
   def next
-    @enterprise = Enterprise.find(params[:id]).next
+    enterprise = Enterprise.find(params[:id])
+    enterprises = Enterprise.next(enterprise.name)
+    if enterprises.empty?
+      @enterprise = enterprise
+    else
+      @enterprise = enterprises.first
+    end
     render :action => 'show'
   end
 
   def previous
-    @enterprise = Enterprise.find(params[:id]).previous
+    enterprise = Enterprise.find(params[:id])
+    enterprises = Enterprise.previous(enterprise.name)
+    if enterprises.empty?
+      @enterprise = enterprise
+    else
+      @enterprise = enterprises.first
+    end
     render :action => 'show'
   end
   

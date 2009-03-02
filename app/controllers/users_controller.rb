@@ -52,12 +52,24 @@ class UsersController < ApplicationController
   end
 
   def next
-    @user = User.find(params[:id]).next
+    user = User.find(params[:id])
+    users = User.next(user.email)
+    if users.empty?
+      @user = user
+    else
+      @user = users.first
+    end
     render :action => 'show'
   end
 
   def previous
-    @user = User.find(params[:id]).previous
+    user = User.find(params[:id])
+    users = User.previous(user.email)
+    if users.empty?
+      @user = user
+    else
+      @user = users.first
+    end
     render :action => 'show'
   end
   

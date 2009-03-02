@@ -141,9 +141,9 @@ module ApplicationHelper
   end
 
   def announcement_link announcement
-    text = truncate(announcement.headline, 25)
+    text = truncate(announcement.headline, :length => 25)
     if current_user == :false or announcement.unread?(current_user)
-      text = "<b>#{truncate(announcement.headline, 21)}</b>"
+      text = "<b>#{truncate(announcement.headline, :length => 21)}</b>"
     end
     link_to text, "#{announcements_path}##{announcement.id}"
   end  

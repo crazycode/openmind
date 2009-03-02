@@ -19,7 +19,6 @@
 # 
 
 class Idea < ActiveRecord::Base
-  acts_as_ordered :order => 'id' 
   acts_as_taggable
   acts_as_solr :fields => [:title, :description], :include => [:comments]
   
@@ -58,6 +57,15 @@ class Idea < ActiveRecord::Base
   attr_accessor :nondb_tag_list #used for calculating changed email notifications
   
   xss_terminate :except => [:description]
+
+  named_scope :next,
+    lambda{|id|{:conditions => ['id > ?', id],
+      :order => 'id',
+      :limit => 1}}
+  named_scope :previous,
+    lambda{|id|{:conditions => ['id < ?', id],
+      :order => 'id desc',
+      :limit => 1}}
   
   def self.list_watched_ideas(page, user, properties, do_paginate)
     list(page, user, properties, do_paginate, 

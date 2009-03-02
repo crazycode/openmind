@@ -3,6 +3,7 @@ class AttachmentsController < ApplicationController
   before_filter :login_required, :except => [ :download ]
   access_control [:index, :edit, :update] => 'prodmgr | sysadmin | mediator',
     [:destroy] => 'prodmgr | sysadmin'
+  cache_sweeper :attachments_sweeper, :only => [ :create, :update, :destroy ]
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create ],
@@ -15,7 +16,9 @@ class AttachmentsController < ApplicationController
   def index
     session[:attachments_search] = nil
     @attachment ||= Attachment.new(:public => true)
-    @attachments = Attachment.list params[:page], current_user.row_limit
+    unless read_fragment({:page => params[:page] || 1})
+      @attachments = Attachment.list params[:page], current_user.row_limit
+    end
   end
 
   def search

@@ -1,5 +1,5 @@
 <tr>
-  <td><%= h truncate(attachment.filename, 50) %></td>
+  <td><%= h truncate(attachment.filename, :length => 50) %></td>
   <td>
     <%= h attachment.description %>
     <% unless attachment.thumbnail.nil? %>
@@ -8,9 +8,9 @@
     <% end %>
   </td>
   <td class="center"><input type="checkbox" name="public" disabled="true" value="true" <%= "checked" if attachment.public?  %></td>
-  <td><%= truncate(attachment.alias, 12) %></td>
+  <td><%= truncate(attachment.alias, :length => 12) %></td>
   <td><%= number_to_human_size attachment.size %></td>
-  <td><%= truncate(attachment.content_type, 20) %></td>
+  <td><%= truncate(attachment.content_type, :length => 20) %></td>
   <td><%= attachment.downloads %></td>
   <td><%= user_display_name attachment.user %></td>
   <td><%= om_date_time attachment.created_at %></td>

@@ -13,7 +13,6 @@
 #
 
 class Enterprise < ActiveRecord::Base
-  acts_as_ordered :order => 'name'
   acts_as_solr :fields => [:name]
   
   validates_presence_of :name, :active
@@ -32,6 +31,14 @@ class Enterprise < ActiveRecord::Base
   belongs_to :enterprise_type
 
   named_scope :active, :conditions => {:active => true}, :order => "name ASC"
+  named_scope :next,
+    lambda{|name|{:conditions => ['name > ?', name],
+      :order => 'name',
+      :limit => 1}}
+  named_scope :previous,
+    lambda{|name|{:conditions => ['name < ?', name],
+      :order => 'name desc',
+      :limit => 1}}
   
   def self.list(page, per_page, start_filter, end_filter, ids)
     conditions = []

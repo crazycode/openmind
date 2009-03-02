@@ -40,6 +40,7 @@ Rails::Initializer.run do |config|
   config.load_paths += Dir["#{RAILS_ROOT}/vendor/**"].map do |dir| 
     File.directory?(lib = "#{dir}/lib") ? lib : dir
   end
+  config.load_paths += %W( #{RAILS_ROOT}/app/sweepers )
 
   # Only load the plugins named here, by default all plugins in vendor/plugins
   # are loaded config.plugins = %W( exception_notification ssl_requirement )
@@ -76,6 +77,16 @@ Rails::Initializer.run do |config|
   # See Rails::Configuration for more options
   config.active_record.observers = :user_observer, :comment_observer, 
     :allocation_observer, :user_request_observer, :idea_observer
+  
+  path = "#{RAILS_ROOT}/config/environment.yml"
+  APP_CONFIG = YAML.load_file(path)
+
+  # load and merge in the environment-specific application config info if present,
+  # overriding base config parameters as specified
+  path = "#{RAILS_ROOT}/config/environments/#{ENV['RAILS_ENV']}.yml"
+  if File.exists?(path) && (env_config = YAML.load_file(path))
+    APP_CONFIG.merge!(env_config)
+  end
 end
 
 # Add new mime types for use in respond_to blocks: Mime::Type.register
@@ -88,15 +99,6 @@ Mime::SET << Mime::CSV
 
 # see http://lemurware.blogspot.com/2006/08/ruby-on-rails-configuration-and.html
 # RBS 1/1/2008
-path = "#{RAILS_ROOT}/config/environment.yml"
-APP_CONFIG = YAML.load_file(path)
-
-# load and merge in the environment-specific application config info if present,
-# overriding base config parameters as specified
-path = "#{RAILS_ROOT}/config/environments/#{ENV['RAILS_ENV']}.yml"
-if File.exists?(path) && (env_config = YAML.load_file(path))
-  APP_CONFIG.merge!(env_config)
-end
 
 WhiteListHelper.tags.merge %w(u table tbody tr td iframe)
 WhiteListHelper.attributes.merge %w(id class style src target align frameborder marginheight marginwidth)

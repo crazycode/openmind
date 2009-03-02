@@ -157,12 +157,22 @@ class UserRequestsController < ApplicationController
   end
 
   def next
-    @user_request = UserRequest.find(params[:id]).next
+    user_requests = UserRequest.next(params[:id])
+    if user_requests.empty?
+      @user_request = UserRequest.find(params[:id])
+    else
+      @user_request = user_requests.first
+    end
     render :action => 'show'
   end
 
   def previous
-    @user_request = UserRequest.find(params[:id]).previous
+    user_requests = UserRequest.previous(params[:id])
+    if user_requests.empty?
+      @user_request = UserRequest.find(params[:id])
+    else
+      @user_request = user_requests.first
+    end
     render :action => 'show'
   end
   

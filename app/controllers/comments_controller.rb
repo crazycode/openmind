@@ -1,9 +1,9 @@
 class CommentsController < ApplicationController  
   helper :ideas
-  
   before_filter :login_required
   access_control [:edit, :update, :destroy] => 'prodmgr | voter',
     [:promote_power_user] => 'mediator'
+  cache_sweeper :comments_sweeper, :only => [ :create, :update, :destroy ]
    
   # GETs should be safe (see
   # http://www.w3.org/2001/tag/doc/whenToUseGet.html)c/whenToUseGet.html)
