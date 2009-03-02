@@ -15,6 +15,8 @@ class AnnouncementsController < ApplicationController
   def index
     current_user.update_attribute(:last_message_read, Time.zone.now)
     @announcements = Announcement.list params[:page], current_user.row_limit
+    expire_fragment(:controller => 'announcements', :action => 'top_five',
+      :user_id => (logged_in? ? current_user.id : -1))
   end
 
   def show

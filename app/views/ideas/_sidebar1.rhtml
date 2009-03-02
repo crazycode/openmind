@@ -47,7 +47,8 @@
     <% end %>
   </div>
 
-  <% cache(:controller => "announcements", :action => "top_five") do %>
+  <% cache(:controller => "announcements", :action => "top_five",
+    :user_id => (logged_in? ? current_user.id : -1)) do %>
     <div class="sideBarTitle">Announcements</div>
     <div class="sideBarItem">
       <div class="unorderListNavContainer">
