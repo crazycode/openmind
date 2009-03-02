@@ -18,7 +18,7 @@ class CommentsSweeper < ActionController::Caching::Sweeper
   def expire_cache_for(comment)
     # Expire a fragment
     if comment.class.to_s == 'TopicComment'
-      expire_fragment(%r{forums.user_id=*})
+      expire_fragment(%r{forums/list_forums.user_id=*})
       expire_fragment(%r{forums/most_active.forum=-1&user_id=*})
       expire_fragment(%r{forums/most_active.forum=#{comment.topic.forum.id}&user_id=*})
       #    expire_fragment(:controller => 'comments', :action => 'index',

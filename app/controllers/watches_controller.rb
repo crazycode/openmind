@@ -53,6 +53,8 @@ class WatchesController < ApplicationController
       
       @forum.watchers << current_user unless @forum.watchers.include? current_user
       @forum.watch_all_topics current_user
+      expire_fragment(:controller => "forums", :action => "list_forums",
+        :user_id => current_user.id)
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to add watch to invalid forum #{params[:id]}")
       flash[:error] = "Attempted to add watch to invalid forum"
@@ -161,6 +163,8 @@ class WatchesController < ApplicationController
       end
       
       @forum.watchers.delete(current_user)
+      expire_fragment(:controller => "forums", :action => "list_forums",
+        :user_id => current_user.id)
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to remove watch from invalid forum #{params[:id]}")
       flash[:error] = "Attempted to remove watch from invalid forum"

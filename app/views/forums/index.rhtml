@@ -37,7 +37,7 @@
       :popup => true %>
   </p>
 <% end %>
-<% cache(:controller => "forums", :action => "index", :user_id => (logged_in? ? current_user.id : -1)) do %>
+<% cache(:controller => "forums", :action => "list_forums", :user_id => (logged_in? ? current_user.id : -1)) do %>
   <%=render(:partial => "forum_group", :locals => { :forums => @forums })%>
 
   <% for forum_group in @forum_groups %>
