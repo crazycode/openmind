@@ -18,6 +18,7 @@ class ForumsSweeper < ActionController::Caching::Sweeper
   def expire_cache_for(record)
     # Expire a fragment
     expire_fragment(%r{forums.user_id=*})
+    expire_fragment(%r{forums/most_active.forum=-1&user_id=*})
 #    expire_fragment(:controller => 'forums', :action => 'index',
 #      :page => params[:page] || 1)
   end

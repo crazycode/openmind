@@ -17,7 +17,9 @@
 
   <%=render(:partial => "link_sets/link_sidebar", :locals => {:link_set => link_set})%>
   
-  <% cache(:controller => "forums", :action => "most_active", :user_id => (logged_in? ? current_user.id : -1)) do %>
+  <% cache(:controller => "forums", :action => "most_active",
+    :forum => (@forum.nil? ? -1 : @forum.id),
+    :user_id => (logged_in? ? current_user.id : -1)) do %>
     <div class="sideBarTitle">Tag Cloud</div>
     <div class="sideBarItem">
       <% tag_cloud get_tags(@forum), %w(css1 css2 css3 css4) do |tag, css_class| %>
