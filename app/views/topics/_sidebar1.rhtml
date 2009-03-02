@@ -1,17 +1,18 @@
 <div id="sidebar1" class="sidebar"> 
-
-  <div class="sideBarTitle">Announcements</div>
-  <div class="sideBarItem">
-    <div class="unorderListNavContainer">
-      <ul class="navlist2">
-        <% for announcement in Announcement.list(1, 5, 5) %>
-          <li>
-            <%= announcement_link announcement %>
-          </li>
-        <% end %>
-      </ul>
+  <% cache(:controller => "announcements", :action => "top_five") do %>
+    <div class="sideBarTitle">Announcements</div>
+    <div class="sideBarItem">
+      <div class="unorderListNavContainer">
+        <ul class="navlist2">
+          <% for announcement in Announcement.list(1, 5, 5) %>
+            <li>
+              <%= announcement_link announcement %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
     </div>
-  </div>
+  <% end %>
 
   <%=render(:partial => "link_sets/link_sidebar", :locals => {:link_set => nvl(@topic.forum.link_set, LinkSet.get_default_link_set)})%>
 
