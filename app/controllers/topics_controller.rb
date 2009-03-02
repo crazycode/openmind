@@ -1,6 +1,6 @@
 class TopicsController < ApplicationController
   before_filter :login_required, :except => [:index, :show, :search]
-  cache_sweeper :topics_sweeper, :only => [ :create, :update, :destroy ]
+  cache_sweeper :topics_sweeper, :only => [ :create, :update, :destroy, :toggle_status ]
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :rate ],
