@@ -4,7 +4,7 @@
     <% if @topic.forum.tracked %>
       <p>
         <label>Status:</label>
-        <%= (@topic.open ? "Open" : "Closed") %>
+        <%= (@topic.open_status ? "Open" : "Closed") %>
         <i><%= "at #{om_date_time(@topic.closed_at)}" unless @topic.closed_at.nil?  %></i>
       </p>
       <p>

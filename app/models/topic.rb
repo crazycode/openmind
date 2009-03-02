@@ -46,17 +46,17 @@ class Topic < ActiveRecord::Base
   named_scope :closed_after,
     lambda{|closed_at| {:conditions => ['closed_at >= ?', closed_at]} }
 
-  named_scope :open, :conditions => ['open = 1']
-  named_scope :closed, :conditions => ['open != 1']
+  named_scope :open, :conditions => ['open_status = 1']
+  named_scope :closed, :conditions => ['open_status != 1']
   named_scope :owned, :conditions => ['owner_id is not null']
   named_scope :unowned, :conditions => ['owner_id is null']
   
   attr_accessor :comment_body
   
   def set_close_date
-    if !open and closed_at.nil?
+    if !open_status and closed_at.nil?
       self.update_attribute(:closed_at, Time.zone.now)
-    elsif open and !closed_at.nil?
+    elsif open_status and !closed_at.nil?
       self.update_attribute(:closed_at, nil)
     end
   end
@@ -68,7 +68,7 @@ class Topic < ActiveRecord::Base
   def self.list(page, per_page, forum, mediator, show_open, show_closed, owner_id)
     paginate :page => page,
       :conditions => ["forum_id = ? " +
-        "AND ((open = 1 and ? = 1) OR (open = 0 and ? = 1))" +
+        "AND ((open_status = 1 and ? = 1) OR (open_status = 0 and ? = 1))" +
         "AND (? = -1 or (? = 0 and owner_id is null) or owner_id = ?)" +
         "AND (? = 1 OR " +
         "EXISTS (SELECT NULL FROM comments AS c " +

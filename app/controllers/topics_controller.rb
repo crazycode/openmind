@@ -166,9 +166,9 @@ class TopicsController < ApplicationController
 
   def toggle_status
     @topic = Topic.find(params[:id])
-    @topic.open = !@topic.open
+    @topic.open_status = !@topic.open_status
     @topic.save!
-    flash[:notice] = "Topic has been marked as #{(@topic.open ? "open" : "closed")}"
+    flash[:notice] = "Topic has been marked as #{(@topic.open_status ? "open" : "closed")}"
     redirect_to topic_path(@topic)
   end
   
