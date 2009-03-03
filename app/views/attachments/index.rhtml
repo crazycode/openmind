@@ -17,10 +17,11 @@
       :popup => true %>
   </p>
 <% end %>
-<% cache(:controller => "attachments",
+<% cache({:controller => "attachments",
   :action => "list_attachments",
   :user_id => current_user.id,
-  :page => (params[:page] || 1)) do %>
+  :page => (params[:page] || 1),
+  :action_type => params["action"]}) do %>
   <table cellspacing="0" cellpadding="0" class="cssform">
     <tr>
       <th>File Name</th>

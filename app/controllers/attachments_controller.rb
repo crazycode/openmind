@@ -24,6 +24,7 @@ class AttachmentsController < ApplicationController
   def search
     session[:attachments_search] = params[:search]
 
+    expire_fragment(%r{attachments/list_attachments\.action_type=search&page=(\d)+&user_id=#{current_user.id}})
     params[:search] = StringUtils.sanitize_search_terms params[:search]
     begin
       search_results = Attachment.find_by_solr(params[:search], :lazy => true).docs.collect(&:id)
