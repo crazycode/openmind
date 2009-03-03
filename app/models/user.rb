@@ -104,17 +104,17 @@ class User < ActiveRecord::Base
 
   named_scope :sysadmins,
     :joins => [:roles],
-    :conditions => ['users.active = 1 and roles.title = ?', 'sysadmin'],
+    :conditions => {:active => 1, :roles => {:title => 'sysadmin'}},
     :order => :email
 
   named_scope :voters,
     :joins => [:roles],
-    :conditions => "roles.title = 'Voter'",
+    :conditions => {:active => 1, :roles => {:title => 'voter'}},
     :order => 'users.email'
 
   named_scope :mediators,
     :joins => [:roles],
-    :conditions => "roles.title = 'Mediator'",
+    :conditions => {:active => 1, :roles => {:title => 'mediator'}},
     :order => 'users.email'
 
   named_scope :next,
