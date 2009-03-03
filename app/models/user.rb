@@ -31,6 +31,7 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
+  extend ActiveSupport::Memoizable
   ajaxful_rater
   acts_as_solr :fields => [:email, :first_name, :last_name], 
     :include => [:enterprise]
@@ -136,6 +137,14 @@ class User < ActiveRecord::Base
   
   def prodmgr?
     roles.collect(&:title).include? 'prodmgr'
+  end
+
+  def voter?
+    roles.collect(&:title).include? 'voter'
+  end
+
+  def allocmgr?
+    roles.collect(&:title).include? 'allocmgr'
   end
 
   def mediator?
@@ -324,4 +333,6 @@ class User < ActiveRecord::Base
       self.activation_code = Digest::SHA1.hexdigest( Time.zone.now.to_s.split(//).sort_by {rand}.join )
     end
   end
+
+  memoize :mediator?, :prodmgr?, :sysadmin?
 end

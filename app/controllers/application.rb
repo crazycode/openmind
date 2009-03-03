@@ -36,39 +36,23 @@ class ApplicationController < ActionController::Base
   end
   
   def prodmgr?
-    return false if current_user == :false
-    pmgr = false
-    restrict_to 'prodmgr' do 
-      pmgr = true
-    end
-    pmgr
+    return false unless logged_in?
+    current_user.prodmgr?
   end
   
   def voter?
-    return false if current_user == :false
-    voter = false
-    restrict_to 'voter' do 
-      voter = true
-    end
-    voter
+    return false unless logged_in?
+    current_user.voter?
   end
   
   def sysadmin?
-    return false if current_user == :false
-    sysadmin = false
-    restrict_to 'sysadmin' do 
-      sysadmin = true
-    end
-    sysadmin
+    return false unless logged_in?
+    current_user.sysadmin?
   end
   
   def allocmgr?
-    return false if current_user == :false
-    allocmgr = false
-    restrict_to 'allocmgr' do 
-      allocmgr = true
-    end
-    allocmgr
+    return false unless logged_in?
+    current_user.allocmgr?
   end
   
   def flash_error_string text

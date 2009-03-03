@@ -38,8 +38,9 @@ module ApplicationHelper
       accessible = (menu[2].nil? or menu[2].empty?)  # no restrictions specified
       if !accessible and logged_in? then         # otherwise you'll need to loop through
         for priviledge in menu[2] # and explicitly see if user has access
-          restrict_to priviledge do 
+          if current_user.roles.collect(&:title).include? priviledge
             accessible = true
+            break;
           end
         end
       end
