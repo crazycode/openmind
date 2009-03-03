@@ -16,7 +16,11 @@ class AttachmentsController < ApplicationController
   def index
     session[:attachments_search] = nil
     @attachment ||= Attachment.new(:public => true)
-    unless read_fragment({:page => params[:page] || 1})
+    unless read_fragment({:controller => "attachments",
+          :action => "list_attachments",
+          :user_id => current_user.id,
+          :page => (params[:page] || 1),
+          :action_type => params["action"]})
       @attachments = Attachment.list params[:page], current_user.row_limit
     end
   end
