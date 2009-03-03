@@ -117,6 +117,7 @@ class ForumsController < ApplicationController
   def mark_all_as_read
     @forum = Forum.find(params[:id])
     @forum.mark_all_topics_as_read current_user
+    expire_fragment(%r{forums/list_forums.user_id=#{current_user.id}})
     flash[:notice] = "All topics have been marked as read"
     redirect_to forum_path(@forum.id)
   end

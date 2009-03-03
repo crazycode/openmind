@@ -83,6 +83,9 @@ class TopicsController < ApplicationController
         flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
         redirect_to redirect_path_on_access_denied(current_user)
       end
+      if logged_in? and @topic.unread_comment?(current_user)
+        expire_fragment(%r{forums/list_forums.user_id=#{current_user.id}})
+      end
       @topic.add_user_read(current_user).save unless current_user == :false
     end
   end
