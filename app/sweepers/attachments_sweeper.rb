@@ -17,7 +17,7 @@ class AttachmentsSweeper < ActionController::Caching::Sweeper
   private
   def expire_cache_for(record)
     # Expire a fragment
-    expire_fragment(%r{attachments.page=*})
+    expire_fragment(%r{attachments/list_attachments.*})
 #    expire_fragment(:controller => 'attachments', :action => 'index',
 #      :page => params[:page] || 1)
   end

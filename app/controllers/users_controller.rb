@@ -199,6 +199,8 @@ class UsersController < ApplicationController
     if @user.save
       flash[:notice] = "User #{@user.login}'s profile was successfully updated."
       redirect_back_or_default home_path
+      # may have changed # of rows to display...clear any impacted cached pages
+      expire_fragment(%r{attachments/list_attachments.page=(\d)+&user_id=#{current_user.id}})
     else
       render :action => 'edit_profile'
     end
