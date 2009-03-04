@@ -66,6 +66,8 @@ Rails::Initializer.run do |config|
   # Make Active Record use UTC-base instead of local time
   # config.active_record.default_timezone = :utc
 
+  config.action_controller.page_cache_directory = RAILS_ROOT + "/tmp/cache"
+
   # Add new inflection rules using the following format (all these examples are
   # active by default): Inflector.inflections do |inflect|
   #   inflect.plural /^(ox)$/i, '\1en'
