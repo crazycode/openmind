@@ -16,7 +16,6 @@ class ForumsController < ApplicationController
 
 
   def new
-    set_types
     @forum = Forum.new
     @mediators = Role.find_users_by_role('mediator')
   end
@@ -89,7 +88,6 @@ class ForumsController < ApplicationController
   end
 
   def edit
-    set_types
     @forum = Forum.find(params[:id])
     @mediators = Role.find_users_by_role('mediator')
     unless @forum.can_edit? current_user
@@ -240,13 +238,5 @@ class ForumsController < ApplicationController
         page.visual_effect :blind_down, :forum_details, :duration => 1
       end
     end
-  end
-
-  def set_types
-    @types = [
-      ["Forum (Any user can create new topics and add comments to existing topics)",  "forum"],
-      ["Blog (Only moderators can create new topics, all users can add comments to existing topics)",  "blog"],
-      ["Announcement (Only moderators can create new topics and add comments to existing topics)",  "announcement"]
-    ]
   end
 end

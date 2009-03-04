@@ -83,6 +83,14 @@ module ForumsHelper
         :method => :post
     end
   end
+
+  def types
+    [
+      ["Forum (Any user can create new topics and add comments to existing topics)",  "forum"],
+      ["Blog (Only moderators can create new topics, all users can add comments to existing topics)",  "blog"],
+      ["Announcement (Only moderators can create new topics and add comments to existing topics)",  "announcement"]
+    ]
+  end
   
 
   def show_forum_watch_icon forum
