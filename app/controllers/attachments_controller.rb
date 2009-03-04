@@ -3,7 +3,7 @@ class AttachmentsController < ApplicationController
   before_filter :login_required, :except => [ :download ]
   access_control [:index, :edit, :update] => 'prodmgr | sysadmin | mediator',
     [:destroy] => 'prodmgr | sysadmin'
-  cache_sweeper :attachments_sweeper, :only => [ :create, :update, :destroy ]
+  cache_sweeper :attachments_sweeper, :only => [ :create, :update, :destroy, :search ]
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create ],
@@ -28,7 +28,6 @@ class AttachmentsController < ApplicationController
   def search
     session[:attachments_search] = params[:search]
 
-    expire_fragment(%r{attachments/list_attachments\.action_type=search&page=(\d)+&user_id=#{current_user.id}})
     params[:search] = StringUtils.sanitize_search_terms params[:search]
     begin
       search_results = Attachment.find_by_solr(params[:search], :lazy => true).docs.collect(&:id)

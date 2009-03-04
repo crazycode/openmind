@@ -86,7 +86,7 @@ class Attachment < ActiveRecord::Base
     for ctype in @@content_types
       return true if ctype == content_type
     end
-    logger.error "================= content type for update: #{content_type}"
+    #    logger.error "================= content type for update: #{content_type}"
     false
   end
 

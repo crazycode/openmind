@@ -14,11 +14,15 @@ class AttachmentsSweeper < ActionController::Caching::Sweeper
     expire_cache_for(attachment)
   end
 
+  def before_attachments_search
+    expire_fragment(%r{attachments/list_attachments\.action_type=search&page=(\d)+&user_id=#{current_user.id}})
+  end
+
   private
   def expire_cache_for(record)
     # Expire a fragment
     expire_fragment(%r{attachments/list_attachments.*})
-#    expire_fragment(:controller => 'attachments', :action => 'index',
-#      :page => params[:page] || 1)
+    #    expire_fragment(:controller => 'attachments', :action => 'index',
+    #      :page => params[:page] || 1)
   end
 end
