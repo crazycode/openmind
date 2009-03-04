@@ -14,6 +14,11 @@ class AnnouncementsSweeper < ActionController::Caching::Sweeper
     expire_cache_for(announcement)
   end
 
+  def after_announcements_index
+    expire_fragment(:controller => 'announcements', :action => 'top_five',
+      :user_id => (logged_in? ? current_user.id : -1))
+  end
+
   private
   def expire_cache_for(record)
     # Expire a fragment

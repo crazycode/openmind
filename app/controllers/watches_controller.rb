@@ -1,6 +1,9 @@
 class WatchesController < ApplicationController
   helper :idea_action, :forums, :products
-  before_filter :login_required
+  before_filter
+  cache_sweeper :forums_sweeper, :only => [ :create_forum_watch,
+    :destroy_forum_watch
+  ]
   
   verify :method => :post, :only => [:create, :create_from_show, :create_topic_watch ],
     :redirect_to =>{ :controller => 'ideas', :action => :index }
@@ -53,8 +56,6 @@ class WatchesController < ApplicationController
       
       @forum.watchers << current_user unless @forum.watchers.include? current_user
       @forum.watch_all_topics current_user
-      expire_fragment(:controller => "forums", :action => "list_forums",
-        :user_id => current_user.id)
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to add watch to invalid forum #{params[:id]}")
       flash[:error] = "Attempted to add watch to invalid forum"
@@ -163,8 +164,6 @@ class WatchesController < ApplicationController
       end
       
       @forum.watchers.delete(current_user)
-      expire_fragment(:controller => "forums", :action => "list_forums",
-        :user_id => current_user.id)
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to remove watch from invalid forum #{params[:id]}")
       flash[:error] = "Attempted to remove watch from invalid forum"

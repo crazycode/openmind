@@ -3,7 +3,8 @@ class ForumsController < ApplicationController
   access_control [:new, :destroy ] => 'sysadmin',
     [:edit, :create, :update, :metrics ] => 'sysadmin|mediator'
   helper :topics
-  cache_sweeper :forums_sweeper, :only => [ :create, :update, :destroy ]
+  cache_sweeper :forums_sweeper, :only => [ :create, :update, :destroy,
+    :mark_all_as_read]
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :mark_all_as_read ],
@@ -117,7 +118,6 @@ class ForumsController < ApplicationController
   def mark_all_as_read
     @forum = Forum.find(params[:id])
     @forum.mark_all_topics_as_read current_user
-    expire_fragment(%r{forums/list_forums.user_id=#{current_user.id}})
     flash[:notice] = "All topics have been marked as read"
     redirect_to forum_path(@forum.id)
   end

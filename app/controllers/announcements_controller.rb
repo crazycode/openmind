@@ -1,7 +1,8 @@
 class AnnouncementsController < ApplicationController
   before_filter :login_required, :except => [:rss]
   access_control [:edit, :update, :destroy, :new, :create] => 'prodmgr | sysadmin'
-  cache_sweeper :announcements_sweeper, :only => [ :create, :update, :destroy ]
+  cache_sweeper :announcements_sweeper, :only => [ :create, :update, :destroy,
+    :index ]
   
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
@@ -15,8 +16,6 @@ class AnnouncementsController < ApplicationController
   def index
     current_user.update_attribute(:last_message_read, Time.zone.now)
     @announcements = Announcement.list params[:page], current_user.row_limit
-    expire_fragment(:controller => 'announcements', :action => 'top_five',
-      :user_id => (logged_in? ? current_user.id : -1))
   end
 
   def show

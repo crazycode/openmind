@@ -14,12 +14,28 @@ class ForumsSweeper < ActionController::Caching::Sweeper
     expire_cache_for(forum)
   end
 
+  def after_forums_mark_all_as_read
+    expire_fragment(%r{forums/list_forums.user_id=#{current_user.id}})
+  end
+
+  def after_watches_create_forum_watch
+    kill_list_forums_cache
+  end
+
+  def after_watches_destroy_forum_watch
+    kill_list_forums_cache
+  end
+
   private
   def expire_cache_for(record)
     # Expire a fragment
-    expire_fragment(%r{forums/list_forums.user_id=*})
+    kill_list_forums_cache
     expire_fragment(%r{forums/most_active.forum=-1&user_id=*})
-#    expire_fragment(:controller => 'forums', :action => 'index',
-#      :page => params[:page] || 1)
+    #    expire_fragment(:controller => 'forums', :action => 'index',
+    #      :page => params[:page] || 1)
+  end
+
+  def kill_list_forums_cache
+    expire_fragment(%r{forums/list_forums.user_id=*})
   end
 end
