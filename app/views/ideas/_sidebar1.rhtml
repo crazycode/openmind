@@ -1,42 +1,45 @@
 <div id="sidebar1" class="sidebar">
-  <div class="sideBarTitle">My Allocations</div>
-  <div class="sideBarItem countbox">
-    <div id="countcontainer">
-      <div class="countbutton64 red64">
-        <div id="user_count" class="count">
-          <%= link_to current_user.available_user_votes,
-            allocations_path(:allocations_filter_user => "yes",
-            :allocations_filter_enterprise => "no",
-            :active_only => "yes"),
-            html_options = {
-            :onmouseover => "Tip('View my user allocations')"} %>
+  <% cache(:controller => "allocations", :action => "my_allocations",
+    :user_id => (logged_in? ? current_user.id : -1)) do %>
+    <div class="sideBarTitle">My Allocations</div>
+    <div class="sideBarItem countbox">
+      <div id="countcontainer">
+        <div class="countbutton64 red64">
+          <div id="user_count" class="count">
+            <%= link_to current_user.available_user_votes,
+              allocations_path(:allocations_filter_user => "yes",
+              :allocations_filter_enterprise => "no",
+              :active_only => "yes"),
+              html_options = {
+              :onmouseover => "Tip('View my user allocations')"} %>
+          </div>
+          <div class="description">User</div>
         </div>
-        <div class="description">User</div>
-      </div>
-      <div class="countbutton64 red64">
-        <div id="enterprise_count" class="count">
-          <%= link_to current_user.available_enterprise_votes,
-            allocations_path(:allocations_filter_user => "no",
-            :allocations_filter_enterprise => "yes",
-            :active_only => "yes"),
-            html_options = {
-            :onmouseover => "Tip('View my enterprise allocations')"} %>
+        <div class="countbutton64 red64">
+          <div id="enterprise_count" class="count">
+            <%= link_to current_user.available_enterprise_votes,
+              allocations_path(:allocations_filter_user => "no",
+              :allocations_filter_enterprise => "yes",
+              :active_only => "yes"),
+              html_options = {
+              :onmouseover => "Tip('View my enterprise allocations')"} %>
+          </div>
+          <div class="description">Enterprise</div>
         </div>
-        <div class="description">Enterprise</div>
-      </div>
-      <div class="countbutton64 black64">
-        <div id="total_count" class="count">
-          <%= link_to current_user.available_votes,
-            allocations_path(:allocations_filter_user => "yes",
-            :allocations_filter_enterprise => "yes",
-            :active_only => "yes"),
-            html_options = {
-            :onmouseover => "Tip('View all of my allocations')"} %>
+        <div class="countbutton64 black64">
+          <div id="total_count" class="count">
+            <%= link_to current_user.available_votes,
+              allocations_path(:allocations_filter_user => "yes",
+              :allocations_filter_enterprise => "yes",
+              :active_only => "yes"),
+              html_options = {
+              :onmouseover => "Tip('View all of my allocations')"} %>
+          </div>
+          <div class="description">Total</div>
         </div>
-        <div class="description">Total</div>
       </div>
     </div>
-  </div>
+  <% end %>
 
   <div class="sideBarTitle">Jump to Idea</div>
   <div class="sideBarItem">

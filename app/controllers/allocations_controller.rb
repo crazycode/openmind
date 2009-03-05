@@ -5,6 +5,7 @@ class AllocationsController < ApplicationController
   before_filter :login_required
   access_control [:create, :new, :export, :import, :update, :destroy, :export_import, :edit] => 'allocmgr'
   helper_method :toggle_image_button
+  cache_sweeper :allocations_sweeper, :only => [ :create, :destroy, :update, :import ]
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :export, :import ],
