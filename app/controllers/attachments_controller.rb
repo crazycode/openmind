@@ -53,18 +53,41 @@ class AttachmentsController < ApplicationController
     params[:attachment][:enterprise_type_ids] ||= []
     params[:attachment][:group_ids] ||= []
     @attachment = Attachment.find(params[:id])
-    if @attachment.update_attributes(params[:attachment])
-      unless from_comment? params
-        @attachment.public = (params[:attachment][:public] == "true")
-        @attachment.alias = nil if @attachment.alias.blank?
-        @attachment.enterprise_types.clear if @attachment.public and !@attachment.enterprise_types.empty?
-        @attachment.groups.clear if @attachment.public and !@attachment.groups.empty?
-        @attachment.save!
+    Attachment.transaction do
+      unless params[:attachment][:alias].blank?
+        other_attachment = Attachment.find_by_alias(params[:attachment][:alias])
+        unless other_attachment.nil? or
+            other_attachment.id == @attachment.id
+          if params[:attachment][:alias] == params[:attachment][:confirm_alias]
+            # user has confirmed the change
+            other_attachment.alias = nil
+            other_attachment.save!
+          else
+            @attachment.attributes = params[:attachment]
+            @attachment.confirm_alias = @attachment.alias
+            flash[:error] =
+              "An attachment with this alias already exists. Please confirm that you would like to move the alias to this attachment."
+            render :action => :edit
+            return
+          end
+        end
       end
-      flash[:notice] = "Attachment '#{@attachment.filename}' was successfully updated."
-      redirect_to attachment_path(@attachment)
-    else
-      render :action => :edit
+    
+      if @attachment.update_attributes(params[:attachment])
+        unless from_comment? params
+          @attachment.public = (params[:attachment][:public] == "true")
+          @attachment.alias = nil if @attachment.alias.blank?
+          @attachment.enterprise_types.clear if @attachment.public and !@attachment.enterprise_types.empty?
+          @attachment.groups.clear if @attachment.public and !@attachment.groups.empty?
+          @attachment.save!
+        end
+        flash[:notice] = "Attachment '#{@attachment.filename}' was successfully updated."
+        redirect_to attachment_path(@attachment)
+      else
+        render :action => :edit
+        # roll back in case alias on another record w/ alias was updated
+        raise ActiveRecord::Rollback
+      end
     end
   end
 

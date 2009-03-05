@@ -33,6 +33,7 @@ class Attachment < ActiveRecord::Base
   belongs_to :parent, :class_name => 'Attachment', :foreign_key => :parent_attachment_id
   has_and_belongs_to_many :enterprise_types
   has_and_belongs_to_many :groups
+  attr_accessor :confirm_alias
 
   def file=(incoming_file)
     self.filename = incoming_file.original_filename

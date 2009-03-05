@@ -22,6 +22,7 @@
     <p>
       <label for="attachment_alias">Alias:</label>
       <%= form.text_field :alias, { :size => 40, :maxlength => 40 } %>
+      <%= form.hidden_field :confirm_alias, { :size => 40, :maxlength => 40 } %>
     </p>
     <%= render(:partial => "details", :object => @attachment) %>
     <p>
