@@ -58,6 +58,7 @@ class AttachmentsController < ApplicationController
         @attachment.public = (params[:attachment][:public] == "true")
         @attachment.alias = nil if @attachment.alias.blank?
         @attachment.enterprise_types.clear if @attachment.public and !@attachment.enterprise_types.empty?
+        @attachment.groups.clear if @attachment.public and !@attachment.groups.empty?
         @attachment.save!
       end
       flash[:notice] = "Attachment '#{@attachment.filename}' was successfully updated."
