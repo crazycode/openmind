@@ -1,6 +1,6 @@
 class AttachmentsController < ApplicationController
   include ActionView::Helpers::NumberHelper
-  before_filter :login_required, :except => [ :download ]
+  before_filter :login_required, :except => [ :download, :html ]
   access_control [:index, :edit, :update] => 'prodmgr | sysadmin | mediator',
     [:destroy] => 'prodmgr | sysadmin'
   cache_sweeper :attachments_sweeper, :only => [ :create, :update, :destroy, :search ]
