@@ -31,7 +31,7 @@ class Topic < ActiveRecord::Base
   has_many :user_topic_reads, :dependent => :delete_all
   has_one :last_comment, :class_name => "TopicComment", :order => "id DESC"
   has_one :main_comment, :class_name => "TopicComment", :order => "id ASC"
-  has_many :topic_watches
+  has_many :topic_watches, :dependent => :delete_all
   has_many :watchers, :through => :topic_watches, :foreign_key => 'user_id'
   
   validates_presence_of :title, :user
@@ -61,8 +61,8 @@ class Topic < ActiveRecord::Base
     end
   end
 
-  def can_delete?
-    comments.count <= 1
+  def can_delete? user
+    self.forum.mediators.include? user
   end
   
   def self.list(page, per_page, forum, mediator, show_open, show_closed, owner_id)

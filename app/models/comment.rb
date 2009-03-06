@@ -17,7 +17,7 @@
 
 class Comment < ActiveRecord::Base
   belongs_to :user
-  has_many :comment_attachments
+  has_many :comment_attachments, :dependent => :destroy
   
   validates_presence_of :user_id
   validates_presence_of :body
